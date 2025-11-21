@@ -50,10 +50,13 @@ export class CameraController extends Observable implements ICameraController {
         return this.getPrivateValue("cameraType", "perspective");
     }
     set cameraType(value: CameraType) {
+        let previousCamera: PerspectiveCamera | OrthographicCamera;
+
         if (this.setProperty("cameraType", value)) {
+            previousCamera = this._camera;
             this._camera = this.createCamera(this._camera.near, this._camera.far);
             if (this.camera instanceof OrthographicCamera) {
-                this.updateOrthographicCamera(this.camera);
+                this.updateOrthographicCamera(this.camera, previousCamera);
             }
             this.updateCameraPosionTarget();
         }
@@ -147,7 +150,10 @@ export class CameraController extends Observable implements ICameraController {
         this.camera.updateProjectionMatrix();
     }
 
-    private updateOrthographicCamera(camera: OrthographicCamera) {
+    private updateOrthographicCamera(
+        camera: OrthographicCamera,
+        previousCamera?: PerspectiveCamera | OrthographicCamera,
+    ) {
         const aspect = this._width / this._height;
         let length = this._position.distanceTo(this._target);
         let frustumHalfHeight = length * Math.tan((CAMERA_FOV * DEG_TO_RAD) / 2);
@@ -155,6 +161,10 @@ export class CameraController extends Observable implements ICameraController {
         camera.right = frustumHalfHeight * aspect;
         camera.top = frustumHalfHeight;
         camera.bottom = -frustumHalfHeight;
+
+        if (previousCamera != undefined) {
+            camera.up = previousCamera.up;
+        }
     }
 
     startRotate(x: number, y: number): void {
