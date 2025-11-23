@@ -2,16 +2,16 @@
 // See LICENSE file in the project root for full license information.
 
 import { XYZ } from "chili-core";
+import { IViewGizmo } from "chili-core/src/visual/viewGizmo";
 import { Matrix4, Vector3 } from "three";
 import { CameraController } from "./cameraController";
 import { ThreeView } from "./threeView";
-import { IViewGizmo } from "chili-core/src/visual/viewGizmo";
 
 const MOUSE_LEFT = 1;
 
 const options = {
-    size: 200,
-    padding: 16,
+    size: 256,
+    padding: 24,
     bubbleSizePrimary: 18,
     bubbleSizeSeconday: 10,
     showSecondary: true,
@@ -20,10 +20,11 @@ const options = {
     fontFamily: "arial",
     fontColor: "#151515",
     fontYAdjust: 0,
+    // [normal, hover]
     colors: {
-        x: ["#f73c3c", "#942424"],
-        y: ["#6ccb26", "#417a17"],
-        z: ["#178cf0", "#0e5490"],
+        x: ["#f73c3cff", "#ff0000ff"],
+        y: ["#50c000ff", "#6aff00ff"],
+        z: ["#1a88e8ff", "#3ec5ffff"],
     },
 };
 
@@ -44,6 +45,7 @@ export class ViewGizmo extends HTMLElement implements IViewGizmo {
     private readonly _context: CanvasRenderingContext2D;
     readonly cameraController: CameraController;
     private _canClick: boolean = true;
+    private _hovering: boolean = false;
     private _selectedAxis?: Axis;
     private _mouse?: Vector3;
 
@@ -180,13 +182,17 @@ export class ViewGizmo extends HTMLElement implements IViewGizmo {
 
     private readonly _onPointerOut = (e: PointerEvent) => {
         e.stopPropagation();
+        this._hovering = false;
+
         this._mouse = undefined;
         this.style.backgroundColor = "transparent";
     };
 
     private readonly _onPointerEnter = (e: PointerEvent) => {
         e.stopPropagation();
-        this.style.backgroundColor = "rgba(66, 66, 66, .9)";
+        this._hovering = true;
+
+        this.style.backgroundColor = "rgba(60, 60, 60, 0.8)";
     };
 
     private readonly _onClick = (e: MouseEvent) => {
@@ -259,11 +265,9 @@ export class ViewGizmo extends HTMLElement implements IViewGizmo {
         let color;
         if (this._selectedAxis === axis) {
             color = "#FFFFFF";
-        } else if (axis.position.z >= -0.01) {
-            color = axis.color[0];
-        } else {
+        } else if (this._hovering === true) {
             color = axis.color[1];
-        }
+        } else color = axis.color[0];
         return color;
     }
 

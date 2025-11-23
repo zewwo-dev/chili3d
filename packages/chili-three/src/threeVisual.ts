@@ -3,12 +3,12 @@
 
 import { IDisposable, IDocument, IEventHandler, IMeshExporter, IVisual, Logger, Plane } from "chili-core";
 import { NodeSelectionHandler } from "chili-vis";
-import { AmbientLight, AxesHelper, Object3D, Scene } from "three";
+import { AmbientLight, AxesHelper, Color, Object3D, Scene } from "three";
+import { ThreeMeshExporter } from "./meshExporter";
 import { ThreeHighlighter } from "./threeHighlighter";
 import { ThreeView } from "./threeView";
-import { ThreeVisualContext } from "./threeVisualContext";
 import { ThreeViewHandler } from "./threeViewEventHandler";
-import { ThreeMeshExporter } from "./meshExporter";
+import { ThreeVisualContext } from "./threeVisualContext";
 
 Object3D.DEFAULT_UP.set(0, 0, 1);
 
@@ -49,6 +49,9 @@ export class ThreeVisual implements IVisual {
         let scene = new Scene();
         let envLight = new AmbientLight(0x888888, 4);
         let axisHelper = new AxesHelper(250);
+
+        axisHelper.setColors(new Color("#f73c3c"), new Color("#00d90e"), new Color("#1a88e8"));
+
         scene.add(envLight, axisHelper);
         return scene;
     }

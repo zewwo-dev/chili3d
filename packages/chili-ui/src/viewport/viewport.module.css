@@ -122,7 +122,7 @@
     right: 16px;
     z-index: 999;
     pointer-events: none;
-    padding-top: 160px;
+    padding-top: 240px;
     color: var(--foreground-color);
 
     svg {
@@ -152,8 +152,9 @@
         border: 1px solid var(--border-color);
         background: var(--panel-background-color);
         border-radius: 10px;
-        margin: 1px 0px;
+        margin-bottom: 8px;
         padding: 2px;
+        gap: 4px;
         pointer-events: all;
         display: flex;
         flex-direction: column;
