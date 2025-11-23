@@ -23,7 +23,7 @@ export const DefaultRibbon: RibbonTab[] = [
                 groupName: "ribbon.group.modify",
                 items: [
                     "modify.move",
-                    ["modify.rotate", "modify.mirror", "modify.array"],
+                    ["modify.rotate", "modify.mirror"], //, "modify.array"],
                     ["modify.split", "modify.break", "modify.trim"],
                     ["modify.fillet", "modify.chamfer", "modify.explode"],
                     ["modify.deleteNode", "modify.removeShapes", "modify.removeFeature"],
@@ -45,14 +45,14 @@ export const DefaultRibbon: RibbonTab[] = [
                     ["workingPlane.set", "workingPlane.alignToPlane", "workingPlane.fromSection"],
                 ],
             },
-            {
-                groupName: "ribbon.group.tools",
-                items: [
-                    "convert.curveProjection",
-                    "create.group",
-                    ["create.section", "create.offset", "create.copyShape"],
-                ],
-            },
+            // {
+            //     groupName: "ribbon.group.tools",
+            //     items: [
+            //         "convert.curveProjection",
+            //         "create.group",
+            //         ["create.section", "create.offset", "create.copyShape"],
+            //     ],
+            // },
             {
                 groupName: "ribbon.group.measure",
                 items: [["measure.length", "measure.angle", "measure.select"]],
@@ -61,10 +61,10 @@ export const DefaultRibbon: RibbonTab[] = [
             //     groupName: "ribbon.group.act",
             //     items: ["act.alignCamera"],
             // },
-            {
-                groupName: "ribbon.group.importExport",
-                items: ["file.import", "file.export"],
-            },
+            // {
+            //     groupName: "ribbon.group.importExport",
+            //     items: ["file.import", "file.export"],
+            // },
             // {
             //     groupName: "ribbon.group.other",
             //     items: ["wechat.group"],
@@ -114,16 +114,16 @@ export const DefaultRibbon: RibbonTab[] = [
             },
             {
                 groupName: "ribbon.group.tools",
-                items: ["create.section", "modify.split", "convert.toWire", "convert.toFace"],
+                items: ["modify.split", "convert.toWire", "convert.toFace"], //["create.section", "modify.split", "convert.toWire", "convert.toFace"],
             },
             // {
             //     groupName: "ribbon.group.act",
             //     items: ["act.alignCamera"],
             // },
-            {
-                groupName: "ribbon.group.other",
-                items: ["test.performance"],
-            },
+            // {
+            //     groupName: "ribbon.group.other",
+            //     items: ["test.performance"],
+            // },
         ],
     },
 ];
