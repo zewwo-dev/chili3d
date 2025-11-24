@@ -6,9 +6,10 @@
 .headerPanel {
     display: flex;
     flex-direction: row;
-    align-items: end;
+    align-items: center;
     flex: 0;
     margin: 0px 12px;
+    padding: 4px;
 }
 
 .itemsPanel {

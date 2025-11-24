@@ -5,10 +5,11 @@
 }
 
 .svg {
+    display: block;
     width: 16px;
     height: 16px;
-    margin-left: 12px;
-    padding: 6px;
+    margin: auto;
+    padding: 8px;
 }
 
 .svg:hover {

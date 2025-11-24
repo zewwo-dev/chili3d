@@ -132,7 +132,7 @@ export default {
         "common.length": "Length",
         "common.dir": "Direction",
         "common.material": "Material",
-        "common.matrix": "Matrix",
+        "common.matrix": "Transform",
         "common.name": "Name",
         "common.normal": "Normal",
         "common.numberX": "Number X",

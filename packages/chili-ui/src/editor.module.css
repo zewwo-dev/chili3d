@@ -23,7 +23,6 @@
         position: relative;
 
         & .sidebarItem {
-            margin-top: 10px;
             overflow: hidden;
             flex: 1 1 auto;
             height: 0;
@@ -53,6 +52,7 @@
     z-index: 10;
     background: var(--resizer-gradient);
     transition: background 0.2s;
+    transform: translateX(100%);
 }
 .sidebarResizer:hover {
     background: var(--resizer-gradient-hover);

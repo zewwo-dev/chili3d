@@ -99,8 +99,8 @@ chili3d-main-window {
     --backdrop-color: rgba(0, 0, 0, 0.75);
     --loading-border-color: rgba(0, 0, 0, 0.2);
     --panel-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-    --resizer-gradient: linear-gradient(to right, rgba(0, 0, 0, 0.04), rgba(0, 0, 0, 0.12));
-    --resizer-gradient-hover: linear-gradient(to right, rgba(0, 0, 0, 0.12), rgba(0, 0, 0, 0.18));
+    --resizer-gradient: rgb(199, 199, 199);
+    --resizer-gradient-hover: rgb(164, 164, 164);
     --error-color: #ff0000;
     --warning-color: #ffc107;
 }
@@ -137,12 +137,8 @@ chili3d-main-window {
     --backdrop-color: rgba(0, 0, 0, 0.75);
     --loading-border-color: rgba(255, 255, 255, 0.2);
     --panel-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
-    --resizer-gradient: linear-gradient(to right, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0.12));
-    --resizer-gradient-hover: linear-gradient(
-        to right,
-        rgba(255, 255, 255, 0.12),
-        rgba(255, 255, 255, 0.18)
-    );
+    --resizer-gradient: rgb(68, 68, 68);
+    --resizer-gradient-hover: rgb(100, 100, 100);
     --error-color: #ff6b6b;
     --warning-color: #ffd93d;
 }

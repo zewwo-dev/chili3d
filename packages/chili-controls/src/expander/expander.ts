@@ -8,16 +8,16 @@ import { div, label, setSVGIcon, svg } from "../controls";
 export class Expander extends HTMLElement {
     private _isExpanded = true;
     private readonly expanderIcon: SVGSVGElement;
-    private readonly headerPanel = div({ className: style.headerPanel });
+    private readonly headerPanel: HTMLDivElement;
     readonly contenxtPanel = div({ className: style.contextPanel });
 
     constructor(header: I18nKeys) {
         super();
+        this.headerPanel = div({ className: style.headerPanel, onclick: this._handleExpanderClick });
         this.className = style.rootPanel;
         this.expanderIcon = svg({
             icon: this.getExpanderIcon(),
             className: style.expanderIcon,
-            onclick: this._handleExpanderClick,
         });
         const text = label({
             textContent: new Localize(header),
