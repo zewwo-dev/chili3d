@@ -99,15 +99,15 @@ export class Tracing implements IDisposable {
      * Serializes the tracing tree into a plain object.
      */
     serialize() {
-        const nodes: Record<NodeId, TracingNode> = {};
+        const nodes: TracingNode[] = [];
         this.nodes.forEach((node, id) => {
-            nodes[id] = node;
-
-            let record = nodes[id].data;
+            let record = node.data;
             if (record != null) {
                 record = RecordSerializer.serializeRecord(record);
             }
-            nodes[id].data = record;
+            node.data = record;
+
+            nodes.push(node);
         });
         return nodes;
     }
