@@ -254,10 +254,14 @@ export namespace RecordSerializer {
                 records: record.records.map((r) => ({
                     action: NodeAction[r.action],
                     node: NodeSerializer.serialize(r.node),
-                    oldParent: r.oldParent ? NodeSerializer.serialize(r.oldParent, false) : undefined,
-                    newParent: r.newParent ? NodeSerializer.serialize(r.newParent, false) : undefined,
-                    oldPrevious: r.oldPrevious ? NodeSerializer.serialize(r.oldPrevious, false) : undefined,
-                    newPrevious: r.newPrevious ? NodeSerializer.serialize(r.newPrevious, false) : undefined,
+                    oldParent: r.oldParent ? NodeSerializer.serialize(r.oldParent, false)[0] : undefined,
+                    newParent: r.newParent ? NodeSerializer.serialize(r.newParent, false)[0] : undefined,
+                    oldPrevious: r.oldPrevious
+                        ? NodeSerializer.serialize(r.oldPrevious, false)[0]
+                        : undefined,
+                    newPrevious: r.newPrevious
+                        ? NodeSerializer.serialize(r.newPrevious, false)[0]
+                        : undefined,
                 })),
             };
         }
