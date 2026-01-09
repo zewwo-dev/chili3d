@@ -2,8 +2,8 @@
 // See LICENSE file in the project root for full license information.
 
 import { v4 as uuidv4 } from "uuid";
-import { INode, INodeLinkedList } from "../model";
-import { IDisposable } from "./disposable";
+import type { INode, INodeLinkedList } from "../model";
+import type { IDisposable } from "./disposable";
 
 export interface IHistoryRecord extends IDisposable {
     readonly name: string;
@@ -148,10 +148,6 @@ export interface NodeRecord {
     oldPrevious?: INode;
     newParent?: INodeLinkedList;
     newPrevious?: INode;
-}
-
-export interface INodeChangedObserver {
-    handleNodeChanged(records: NodeRecord[]): void;
 }
 
 export class NodeLinkedListHistoryRecord implements IHistoryRecord {

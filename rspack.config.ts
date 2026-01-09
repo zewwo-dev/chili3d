@@ -1,9 +1,10 @@
-const rspack = require("@rspack/core");
-const { defineConfig } = require("@rspack/cli");
-const ForkTsCheckerWebpackPlugin = require("fork-ts-checker-webpack-plugin");
-const packages = require("./package.json");
+import { defineConfig } from "@rspack/cli";
+import rspack from "@rspack/core";
+import ForkTsCheckerWebpackPlugin from "fork-ts-checker-webpack-plugin";
+import packages from "./package.json";
 
-const config = defineConfig({
+export default defineConfig({
+    devtool: process.env.NODE_ENV === "production" ? false : "source-map",
     entry: {
         main: "./packages/chili-web/src/index.ts",
     },
@@ -45,7 +46,7 @@ const config = defineConfig({
         ],
     },
     resolve: {
-        extensions: [".ts", ".js"],
+        extensions: [".ts", ".js", ".json", ".wasm"],
         fallback: {
             fs: false,
             perf_hooks: false,
@@ -58,6 +59,10 @@ const config = defineConfig({
     },
     plugins: [
         new ForkTsCheckerWebpackPlugin(),
+        new rspack.CircularDependencyRspackPlugin({
+            failOnError: true,
+            exclude: /node_modules/,
+        }),
         new rspack.CopyRspackPlugin({
             patterns: [
                 {
@@ -71,6 +76,7 @@ const config = defineConfig({
         new rspack.DefinePlugin({
             __APP_VERSION__: JSON.stringify(packages.version),
             __DOCUMENT_VERSION__: JSON.stringify(packages.documentVersion),
+            __IS_PRODUCTION__: JSON.stringify(process.env.NODE_ENV === "production"),
         }),
         new rspack.HtmlRspackPlugin({
             template: "./public/index.html",
@@ -90,6 +96,7 @@ const config = defineConfig({
             new rspack.LightningCssMinimizerRspackPlugin(),
         ],
     },
+    output: {
+        clean: true,
+    },
 });
-
-module.exports = config;

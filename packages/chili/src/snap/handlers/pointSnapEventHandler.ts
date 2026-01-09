@@ -2,19 +2,19 @@
 // See LICENSE file in the project root for full license information.
 
 import {
-    AsyncController,
+    type AsyncController,
     Config,
-    I18nKeys,
-    ICurve,
-    IDocument,
-    IView,
-    Plane,
-    Ray,
-    ShapeType,
-    XYZ
+    type I18nKeys,
+    type ICurve,
+    type IDocument,
+    type IView,
+    type Line,
+    type Plane,
+    type ShapeType,
+    XYZ,
 } from "chili-core";
 import { Dimension } from "../dimension";
-import { ISnap, SnapData, SnapResult } from "../snap";
+import type { ISnap, SnapData, SnapResult } from "../snap";
 import { AxisSnap, ObjectSnap, PlaneSnap, PointOnCurveSnap, WorkplaneSnap } from "../snaps";
 import { TrackingSnap } from "../tracking";
 import { SnapEventHandler } from "./snapEventHandler";
@@ -30,7 +30,7 @@ export interface SnapPointOnCurveData extends PointSnapData {
 }
 
 export interface SnapPointOnAxisData extends PointSnapData {
-    ray: Ray
+    ray: Line;
 }
 
 export class PointSnapEventHandler extends SnapEventHandler<PointSnapData> {
@@ -45,7 +45,7 @@ export class PointSnapEventHandler extends SnapEventHandler<PointSnapData> {
             ? new PlaneSnap(pointData.plane, pointData.refPoint)
             : new WorkplaneSnap(pointData.refPoint);
         const trackingSnap = new TrackingSnap(pointData.refPoint, true);
-        return [objectSnap, trackingSnap, workplaneSnap]
+        return [objectSnap, trackingSnap, workplaneSnap];
     }
 
     protected getPointFromInput(view: IView, text: string): SnapResult {
@@ -144,13 +144,13 @@ export class SnapPointOnCurveEventHandler extends SnapEventHandler<SnapPointOnCu
 export class SnapPointOnAxisEventHandler extends SnapEventHandler<SnapPointOnAxisData> {
     constructor(document: IDocument, controller: AsyncController, pointData: SnapPointOnAxisData) {
         const objectSnap = new ObjectSnap(Config.instance.snapType);
-        const snap = new AxisSnap(pointData.ray.location, pointData.ray.direction);
+        const snap = new AxisSnap(pointData.ray.point, pointData.ray.direction);
         super(document, controller, [objectSnap, snap], pointData);
     }
 
     protected override getPointFromInput(view: IView, text: string): SnapResult {
         const parameter = Number(text);
-        const point = this.data.ray.location.add(this.data.ray.direction.multiply(parameter));
+        const point = this.data.ray.point.add(this.data.ray.direction.multiply(parameter));
         return { point, view, shapes: [] };
     }
 
@@ -163,17 +163,14 @@ export class SnapPointPlaneEventHandler extends PointSnapEventHandler {
     protected override getInitSnaps(pointData: PointSnapData): ISnap[] {
         if (!pointData.plane) throw new Error("plane is required");
 
-        return [
-            new ObjectSnap(Config.instance.snapType),
-            new PlaneSnap(pointData.plane)
-        ]
+        return [new ObjectSnap(Config.instance.snapType), new PlaneSnap(pointData.plane)];
     }
 
     protected override findSnapPoint(shapeType: ShapeType, view: IView, event: PointerEvent): void {
         super.findSnapPoint(shapeType, view, event);
-        
+
         if (this._snaped?.point) {
-            this._snaped.point = this.data.plane!().project(this._snaped.point)
+            this._snaped.point = this.data.plane!().project(this._snaped.point);
         }
     }
 }

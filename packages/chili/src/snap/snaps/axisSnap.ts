@@ -1,8 +1,8 @@
 // Part of the Chili3d Project, under the AGPL-3.0 License.
 // See LICENSE file in the project root for full license information.
 
-import { EdgeMeshData, IView, LineType, Plane, VisualConfig, XYZ } from "chili-core";
-import { ISnap, MouseAndDetected, SnapResult } from "../snap";
+import { EdgeMeshData, type IView, LineType, Plane, VisualConfig, type XYZ } from "chili-core";
+import type { ISnap, MouseAndDetected, SnapResult } from "../snap";
 
 export class AxisSnap implements ISnap {
     private _tempLines?: [IView, number];
@@ -19,7 +19,7 @@ export class AxisSnap implements ISnap {
 
         const plane = new Plane(this.point, normal, right!);
         const ray = data.view.rayAt(data.mx, data.my);
-        const intersect = plane.intersect(ray, false);
+        const intersect = plane.intersectRay(ray);
         if (!intersect) return undefined;
 
         const vector = intersect.sub(this.point);

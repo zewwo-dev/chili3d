@@ -1,13 +1,13 @@
 // Part of the Chili3d Project, under the AGPL-3.0 License.
 // See LICENSE file in the project root for full license information.
 
-import { MeshUtils } from "chili-geo";
-import { IDocument } from "../document";
+import type { IDocument } from "../document";
 import { Id, PropertyHistoryRecord, Transaction } from "../foundation";
 import { BoundingBox } from "../math";
 import { Property } from "../property";
 import { Serializer } from "../serialize";
-import { FaceMeshData, IShapeMeshData } from "../shape";
+import type { FaceMeshData, IShapeMeshData } from "../shape";
+import { MeshUtils } from "../visual/meshUtils";
 import { VisualNode } from "./visualNode";
 
 @Serializer.register(["faceIndex", "materialIndex"])
@@ -52,7 +52,7 @@ export abstract class GeometryNode extends VisualNode {
         id: string = Id.generate(),
     ) {
         super(document, name, id);
-        this.setPrivateValue("materialId", materialId ?? document.materials.at(0)?.id ?? "");
+        this.setPrivateValue("materialId", materialId ?? document.modelManager.materials.at(0)?.id ?? "");
     }
 
     protected _mesh: IShapeMeshData | undefined;
@@ -122,9 +122,7 @@ export abstract class GeometryNode extends VisualNode {
             this.faceMaterialPair.filter((x) => !faceIndexs.includes(x.faceIndex)),
         );
         toDelete.forEach((pair) => {
-            const hasSameMaterial = this.faceMaterialPair.some(
-                (x) => x.materialIndex === pair.materialIndex,
-            );
+            const hasSameMaterial = this.faceMaterialPair.some((x) => x.materialIndex === pair.materialIndex);
             if (hasSameMaterial || !Array.isArray(this.materialId)) {
                 return;
             }

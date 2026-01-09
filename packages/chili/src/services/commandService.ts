@@ -1,7 +1,16 @@
 // Part of the Chili3d Project, under the AGPL-3.0 License.
 // See LICENSE file in the project root for full license information.
 
-import { Command, CommandKeys, IApplication, ICommand, IService, IView, Logger, PubSub } from "chili-core";
+import {
+    Command,
+    type CommandKeys,
+    type IApplication,
+    ICommand,
+    type IService,
+    type IView,
+    Logger,
+    PubSub,
+} from "chili-core";
 
 export class CommandService implements IService {
     private _lastCommand: CommandKeys | undefined;
@@ -54,15 +63,16 @@ export class CommandService implements IService {
         const command = new commandCtor();
         this.app.executingCommand = command;
         PubSub.default.pub("showProperties", this.app.activeView?.document!, []);
-        try {
-            await command.execute(this.app);
-        } catch (err) {
-            PubSub.default.pub("displayError", err as string);
-            Logger.error(err);
-        } finally {
-            this._lastCommand = commandName;
-            this.app.executingCommand = undefined;
-        }
+
+        await Promise.try(command.execute.bind(command), this.app)
+            .catch((err) => {
+                PubSub.default.pub("displayError", err as string);
+                Logger.error(err);
+            })
+            .finally(() => {
+                this._lastCommand = commandName;
+                this.app.executingCommand = undefined;
+            });
     }
 
     private async canExecute(commandName: CommandKeys) {

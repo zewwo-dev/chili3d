@@ -1,10 +1,10 @@
 // Part of the Chili3d Project, under the AGPL-3.0 License.
 // See LICENSE file in the project root for full license information.
 
-import { IDocument } from "../document";
-import { HistoryObservable, IDisposable, IPropertyChanged, Id } from "../foundation";
+import type { IDocument } from "../document";
+import { HistoryObservable, type IDisposable, Id, type IPropertyChanged } from "../foundation";
 import { Property } from "../property";
-import { Serialized, Serializer } from "../serialize";
+import { type Serialized, Serializer } from "../serialize";
 
 export interface INode extends IPropertyChanged, IDisposable {
     readonly id: string;
@@ -84,7 +84,7 @@ export abstract class Node extends HistoryObservable implements INode {
         const oldValue = this.document.history.disabled;
         try {
             this.document.history.disabled = true;
-            let serialized = Serializer.serializeObject(this);
+            const serialized = Serializer.serializeObject(this);
             serialized.properties["id"] = Id.generate();
             serialized.properties["name"] = `${this.name}_copy`;
             return Serializer.deserializeObject(this.document, serialized) as this;
@@ -99,13 +99,13 @@ export abstract class Node extends HistoryObservable implements INode {
 export namespace INode {
     export function getNodesBetween(node1: INode, node2: INode): INode[] {
         if (node1 === node2) return [node1];
-        let nodes: INode[] = [];
-        let prePath = getPathToRoot(node1);
-        let curPath = getPathToRoot(node2);
-        let index = getCommonParentIndex(prePath, curPath);
-        let parent = prePath.at(1 - index) as INodeLinkedList;
+        const nodes: INode[] = [];
+        const prePath = getPathToRoot(node1);
+        const curPath = getPathToRoot(node2);
+        const index = getCommonParentIndex(prePath, curPath);
+        const parent = prePath.at(1 - index) as INodeLinkedList;
         if (parent === curPath[0] || parent === prePath[0]) {
-            let child = parent === curPath[0] ? prePath[0] : curPath[0];
+            const child = parent === curPath[0] ? prePath[0] : curPath[0];
             getNodesFromParentToChild(nodes, parent, child);
         } else if (currentAtBack(prePath.at(-index)!, curPath.at(-index)!)) {
             getNodesFromPath(nodes, prePath, curPath, index);
@@ -158,7 +158,7 @@ export namespace INode {
     }
 
     export function findTopLevelNodes(nodes: Set<INode>) {
-        let result: INode[] = [];
+        const result: INode[] = [];
         for (const node of nodes) {
             if (!containsDescendant(nodes, node)) {
                 result.push(node);
@@ -210,7 +210,7 @@ export namespace INode {
     }
 
     function getPathToRoot(node: INode): INode[] {
-        let path: INode[] = [];
+        const path: INode[] = [];
         let parent: INode | undefined = node;
         while (parent !== undefined) {
             path.push(parent);
@@ -220,20 +220,74 @@ export namespace INode {
     }
 }
 
+export class NodeUtils {
+    static findNode(parent: INodeLinkedList, predicate: (value: INode) => boolean) {
+        function findNodeRecursive(
+            node: INode | undefined,
+            predicate: (value: INode) => boolean,
+        ): INode | undefined {
+            if (!node) {
+                return undefined;
+            }
+
+            if (predicate(node)) {
+                return node;
+            }
+
+            if (INode.isLinkedListNode(node)) {
+                const found = findNodeRecursive(node.firstChild, predicate);
+                if (found) {
+                    return found;
+                }
+            }
+
+            return findNodeRecursive(node.nextSibling, predicate);
+        }
+
+        return findNodeRecursive(parent.firstChild, predicate);
+    }
+
+    static findNodes(parent: INodeLinkedList, predicate?: (value: INode) => boolean) {
+        function findNodesRecursive(
+            result: INode[],
+            node: INode | undefined,
+            predicate?: (value: INode) => boolean,
+        ) {
+            if (!node) return;
+
+            if (!predicate || predicate(node)) {
+                result.push(node);
+            }
+
+            if (INode.isLinkedListNode(node)) {
+                findNodesRecursive(result, node.firstChild, predicate);
+            }
+
+            if (node.nextSibling) {
+                findNodesRecursive(result, node.nextSibling, predicate);
+            }
+        }
+
+        const result: INode[] = [];
+        findNodesRecursive(result, parent.firstChild, predicate);
+        return result;
+    }
+}
+
 export namespace NodeSerializer {
     export function serialize(node: INode, deep: boolean = true) {
-        let nodes: Serialized[] = [];
+        const nodes: Serialized[] = [];
         if (deep) {
             serializeNodeToArray(nodes, node, undefined);
         } else {
-            let serialized: any = Serializer.serializeObject(node);
+            const serialized: any = Serializer.serializeObject(node);
             nodes.push(serialized);
         }
         return nodes;
     }
 
     function serializeNodeToArray(nodes: Serialized[], node: INode, parentId: string | undefined) {
-        let serialized: any = Serializer.serializeObject(node);
+        const serialized: any = Serializer.serializeObject(node);
         if (parentId) serialized["parentId"] = parentId;
         nodes.push(serialized);
 
@@ -247,13 +301,13 @@ export namespace NodeSerializer {
     }
 
     export async function deserialize(document: IDocument, nodes: Serialized[]) {
-        let nodeMap: Map<string, INodeLinkedList> = new Map();
+        const nodeMap: Map<string, INodeLinkedList> = new Map();
         nodes.forEach((n) => {
-            let node = Serializer.deserializeObject(document, n);
+            const node = Serializer.deserializeObject(document, n);
             if (INode.isLinkedListNode(node)) {
                 nodeMap.set(n.properties["id"], node);
             }
-            let parentId = (n as any)["parentId"];
+            const parentId = (n as any)["parentId"];
             if (!parentId) return;
             if (nodeMap.has(parentId)) {
                 nodeMap.get(parentId)!.add(node);

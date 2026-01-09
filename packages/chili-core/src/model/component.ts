@@ -1,16 +1,16 @@
 // Part of the Chili3d Project, under the AGPL-3.0 Licensettt.
 // See LICENSE file in the project root for full license information.
 
-import { MeshUtils } from "chili-geo";
-import { IDocument } from "../document";
+import type { IDocument } from "../document";
 import { Id } from "../foundation";
-import { I18nKeys } from "../i18n";
-import { BoundingBox, Matrix4, XYZ } from "../math";
+import type { I18nKeys } from "../i18n";
+import { BoundingBox, Matrix4, type XYZ } from "../math";
 import { Property } from "../property";
 import { Serializer } from "../serialize";
-import { EdgeMeshData, FaceMeshData, LineType, Mesh } from "../shape";
+import { type EdgeMeshData, type FaceMeshData, LineType, Mesh } from "../shape";
+import { MeshUtils } from "../visual/meshUtils";
 import { MeshNode } from "./meshNode";
-import { INode } from "./node";
+import type { INode } from "./node";
 import { ShapeNode } from "./shapeNode";
 import { VisualNode } from "./visualNode";
 
@@ -41,7 +41,10 @@ export function createComponentMesh(size: ComponentSize): ComponentMesh {
         },
         linesegments: Mesh.createLineSegments(size.lineSegment),
         surfaceMaterials: [],
-        surface: Mesh.createSurface(size.meshPosition, size.meshIndex > 0 ? size.meshIndex : size.meshPosition * 3),
+        surface: Mesh.createSurface(
+            size.meshPosition,
+            size.meshIndex > 0 ? size.meshIndex : size.meshPosition * 3,
+        ),
     };
 }
 
@@ -209,12 +212,7 @@ export class Component {
         });
     }
 
-    private mergeMeshNode(
-        visual: ComponentMesh,
-        node: MeshNode,
-        transform: Matrix4,
-        offset: ComponentSize
-    ) {
+    private mergeMeshNode(visual: ComponentMesh, node: MeshNode, transform: Matrix4, offset: ComponentSize) {
         if (node.mesh.meshType === "surface") {
             const materialONMap = this.mapOldNewMaterialIndex(node.materialId, visual.surfaceMaterials);
             MeshUtils.setSurfaceMeshData(visual.surface, node.mesh, transform, offset, materialONMap);
@@ -223,7 +221,10 @@ export class Component {
                 offset.meshIndex += node.mesh.index.length;
             }
         } else if (node.mesh.meshType === "linesegments") {
-            visual.linesegments.position?.set(transform.ofPoints(node.mesh.position!), offset.lineSegment * 3);
+            visual.linesegments.position?.set(
+                transform.ofPoints(node.mesh.position!),
+                offset.lineSegment * 3,
+            );
             offset.lineSegment += node.mesh.position!.length / 3;
         }
     }
@@ -275,7 +276,7 @@ export class ComponentNode extends VisualNode {
     @Property.define("body.group")
     get component() {
         if (!this._component) {
-            this._component = this.document.components.find((c) => c.id === this.componentId);
+            this._component = this.document.modelManager.components.find((c) => c.id === this.componentId);
             if (!this._component) {
                 throw new Error(`Component ${this.componentId} not found`);
             }

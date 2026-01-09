@@ -2,14 +2,14 @@
 // See LICENSE file in the project root for full license information.
 
 import {
+    command,
     EditableShapeNode,
-    ISubEdgeShape,
+    type ISubEdgeShape,
     Property,
-    ShapeNode,
+    type ShapeNode,
     ShapeType,
     Transaction,
     VisualState,
-    command,
 } from "chili-core";
 import { SelectShapeStep } from "../../step/selectStep";
 import { MultistepCommand } from "../multistepCommand";
@@ -40,7 +40,7 @@ export class FilletCommand extends MultistepCommand {
 
             const model = new EditableShapeNode(this.document, node.name, filetShape, node.materialId);
             model.transform = node.transform;
-            (node.parent ?? this.document.rootNode).add(model);
+            (node.parent ?? this.document.modelManager.rootNode).add(model);
             node.parent?.remove(node);
             this.document.visual.update();
         });

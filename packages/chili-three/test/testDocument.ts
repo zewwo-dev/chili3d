@@ -2,39 +2,31 @@
 // See LICENSE file in the project root for full license information.
 
 import {
-    Act,
+    type Act,
     History,
-    IApplication,
-    IDocument,
-    INode,
-    INodeChangedObserver,
-    INodeLinkedList,
-    ISelection,
-    ISerialize,
-    IView,
-    Material,
-    NodeRecord,
+    type IApplication,
+    type IDocument,
+    type ISelection,
+    type ISerialize,
+    type IView,
+    ModelManager,
     ObservableCollection,
-    PropertyChangedHandler,
-    Serialized,
-    Tracing,
+    type PropertyChangedHandler,
+    type Serialized,
+    type Tracing,
 } from "chili-core";
-import { Component } from "chili-core/src/model/component";
 import { ThreeVisual } from "../src/threeVisual";
 
 export class TestDocument implements IDocument, ISerialize {
     application: IApplication;
-    components: Component[] = [];
     name: string;
-    currentNode: INodeLinkedList | undefined;
     id: string;
     history: History;
     tracing: Tracing;
     selection: ISelection;
     visual: ThreeVisual;
-    rootNode: INodeLinkedList;
     activeView: IView | undefined;
-    materials: ObservableCollection<Material> = new ObservableCollection<Material>();
+    modelManager: ModelManager = new ModelManager(this);
     acts: ObservableCollection<Act> = new ObservableCollection<Act>();
     onPropertyChanged<K extends keyof this>(handler: PropertyChangedHandler<this, K>): void {
         throw new Error("Method not implemented.");
@@ -65,23 +57,12 @@ export class TestDocument implements IDocument, ISerialize {
         this.name = "test";
         this.id = "test";
         this.visual = new ThreeVisual(this);
-        this.history = {} as any;
+        this.history = new History();
         this.tracing = {} as any;
         this.selection = {} as any;
-        this.rootNode = {} as any;
         this.application = { views: [] } as any;
     }
     clearPropertyChanged(): void {
-        throw new Error("Method not implemented.");
-    }
-    addNodeObserver(observer: INodeChangedObserver): void {}
-    removeNodeObserver(observer: INodeChangedObserver): void {
-        throw new Error("Method not implemented.");
-    }
-    notifyNodeChanged(records: NodeRecord[]): void {
-        throw new Error("Method not implemented.");
-    }
-    addNode(...nodes: INode[]): void {
         throw new Error("Method not implemented.");
     }
     save(): Promise<void> {

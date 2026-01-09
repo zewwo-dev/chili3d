@@ -2,11 +2,10 @@
 // See LICENSE file in the project root for full license information.
 
 import {
-    IDocument,
+    type IDocument,
     INode,
-    INodeChangedObserver,
-    INodeLinkedList,
-    NodeRecord,
+    type INodeLinkedList,
+    type NodeRecord,
     PubSub,
     ShapeType,
     Transaction,
@@ -18,7 +17,7 @@ import { TreeItem } from "./treeItem";
 import { TreeGroup } from "./treeItemGroup";
 import { TreeModel } from "./treeModel";
 
-export class Tree extends HTMLElement implements INodeChangedObserver {
+export class Tree extends HTMLElement {
     private readonly nodeMap = new Map<INode, TreeItem>();
     private lastClicked: INode | undefined;
     private readonly selectedNodes: Set<INode> = new Set();
@@ -31,17 +30,17 @@ export class Tree extends HTMLElement implements INodeChangedObserver {
     }
 
     private initializeTree(document: IDocument) {
-        this.addAllNodes(document, this, document.rootNode);
+        this.addAllNodes(document, this, document.modelManager.rootNode);
         this.addEvents(this);
     }
 
     connectedCallback() {
-        this.document.addNodeObserver(this);
+        this.document.modelManager.addNodeObserver(this.handleNodeChanged);
         PubSub.default.sub("selectionChanged", this.handleSelectionChanged);
     }
 
     disconnectedCallback() {
-        this.document.removeNodeObserver(this);
+        this.document.modelManager.removeNodeObserver(this.handleNodeChanged);
         PubSub.default.remove("selectionChanged", this.handleSelectionChanged);
     }
 
@@ -56,25 +55,25 @@ export class Tree extends HTMLElement implements INodeChangedObserver {
         this.nodeMap.clear();
         this.selectedNodes.clear();
         this.removeEvents(this);
-        this.document.removeNodeObserver(this);
+        this.document.modelManager.removeNodeObserver(this.handleNodeChanged);
         PubSub.default.remove("selectionChanged", this.handleSelectionChanged);
         this.document = null as any;
     }
 
-    handleNodeChanged(records: NodeRecord[]) {
+    readonly handleNodeChanged = (records: NodeRecord[]) => {
         this.ensureHasHTML(records);
         records.forEach((record) => {
             const ele = this.nodeMap.get(record.node);
             ele?.remove();
             if (!ele || !record.newParent) return;
 
-            let parent = this.nodeMap.get(record.newParent) || this.createAndMapParent(record.newParent);
+            const parent = this.nodeMap.get(record.newParent) || this.createAndMapParent(record.newParent);
             if (parent instanceof TreeGroup) {
                 const pre = record.newPrevious ? this.nodeMap.get(record.newPrevious) : null;
                 parent.insertAfter(ele, pre ?? null);
             }
         });
-    }
+    };
 
     private createAndMapParent(newParent: INode) {
         const parent = this.createHTMLElement(this.document, newParent);
@@ -220,12 +219,12 @@ export class Tree extends HTMLElement implements INodeChangedObserver {
         this.lastClicked = item;
         if (item !== undefined) {
             this.nodeMap.get(item)?.addSelectedStyle(style.current);
-            this.document.currentNode = INode.isLinkedListNode(item) ? item : item.parent;
+            this.document.modelManager.currentNode = INode.isLinkedListNode(item) ? item : item.parent;
         }
     }
 
     private canDrop(event: DragEvent) {
-        let node = this.getTreeItem(event.target as HTMLElement)?.node;
+        const node = this.getTreeItem(event.target as HTMLElement)?.node;
         if (node === undefined) return false;
         if (this.dragging?.includes(node)) return false;
         let parent = node.parent;
@@ -240,12 +239,12 @@ export class Tree extends HTMLElement implements INodeChangedObserver {
         event.preventDefault();
         event.stopPropagation();
 
-        let node = this.getTreeItem(event.target as HTMLElement)?.node;
+        const node = this.getTreeItem(event.target as HTMLElement)?.node;
         if (node === undefined) return;
         Transaction.execute(this.document, "move node", () => {
-            let isLinkList = INode.isLinkedListNode(node);
-            let newParent = isLinkList ? (node as INodeLinkedList) : node.parent;
-            let target = isLinkList ? undefined : node;
+            const isLinkList = INode.isLinkedListNode(node);
+            const newParent = isLinkList ? (node as INodeLinkedList) : node.parent;
+            const target = isLinkList ? undefined : node;
             this.dragging?.forEach((x) => {
                 x.parent?.move(x, newParent!, target);
             });
