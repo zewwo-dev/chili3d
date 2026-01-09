@@ -26,6 +26,7 @@ export class TestDocument implements IDocument, ISerialize {
     visual: IVisual;
     activeView: IView | undefined;
     modelManager: ModelManager = new ModelManager(this);
+    tracing: any;
     materials: ObservableCollection<Material> = new ObservableCollection<Material>();
     acts: ObservableCollection<Act> = new ObservableCollection<Act>();
     onPropertyChanged<K extends keyof this>(handler: PropertyChangedHandler<this, K>): void {
@@ -58,6 +59,7 @@ export class TestDocument implements IDocument, ISerialize {
         this.id = "test";
         this.visual = {} as any;
         this.history = new History();
+        this.tracing = {} as any;
         this.selection = {} as any;
         this.application = { views: [] } as any;
     }

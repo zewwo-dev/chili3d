@@ -1,11 +1,11 @@
 import { v4 as uuidv4 } from "uuid";
 import { NodeSerializer } from "../model";
 import { Serializer } from "../serialize";
-import { IDisposable } from "./disposable";
+import type { IDisposable } from "./disposable";
 import {
     ArrayRecord,
     History,
-    IHistoryRecord,
+    type IHistoryRecord,
     NodeAction,
     NodeLinkedListHistoryRecord,
     PropertyHistoryRecord,
@@ -35,6 +35,7 @@ export interface TracingDiff {
  * @beta
  */
 export class Tracing implements IDisposable {
+    // biome-ignore lint/correctness/noInvalidUseBeforeDeclaration: <explanation>
     private readonly traceUploader: TraceUploader = new TraceUploader(this);
     private nodes: Map<NodeId, TracingNode> = new Map();
     private currentId: NodeId;
@@ -180,7 +181,7 @@ export class TraceUploader {
      * Ran only once during the life of a Tracing instance
      */
     private async createData(): Promise<boolean> {
-        let serializedData = this.tracing.serialize();
+        const serializedData = this.tracing.serialize();
 
         try {
             const res = await fetch(this.endpoint, {
@@ -191,7 +192,7 @@ export class TraceUploader {
                 body: JSON.stringify({ id: serializedData[0].id, payload: serializedData }),
             });
 
-            if (!res.ok && res.status != 409) return false;
+            if (!res.ok && res.status !== 409) return false;
 
             this.synced = true;
             this.lastSyncedId = serializedData[serializedData.length - 1].id;

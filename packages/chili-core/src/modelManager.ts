@@ -1,6 +1,7 @@
 // Part of the Chili3d Project, under the AGPL-3.0 License.
 // See LICENSE file in the project root for full license information.
 
+import { v4 as uuidv4 } from "uuid";
 import type { IDocument } from "./document";
 import {
     CollectionAction,
@@ -134,6 +135,7 @@ export class ModelManager extends Observable {
                 dispose() {},
                 undo: () => this.materials.remove(...args.items),
                 redo: () => this.materials.push(...args.items),
+                id: uuidv4(),
             });
         } else if (args.action === CollectionAction.remove) {
             Transaction.add(this.document, {
@@ -141,6 +143,7 @@ export class ModelManager extends Observable {
                 dispose() {},
                 undo: () => this.materials.push(...args.items),
                 redo: () => this.materials.remove(...args.items),
+                id: uuidv4(),
             });
         }
     };

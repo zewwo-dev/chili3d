@@ -19,9 +19,7 @@ import {
     type Serialized,
     Serializer,
     Tracing,
-    Transaction,
 } from "chili-core";
-import { v4 as uuidv4 } from "uuid";
 import { Selection } from "./selection";
 
 export class Document extends Observable implements IDocument {
