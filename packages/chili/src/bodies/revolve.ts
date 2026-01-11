@@ -17,7 +17,7 @@ export class RevolvedNode extends ParameterShapeNode {
         return "body.revol";
     }
 
-    @Serializer.serialze()
+    @Serializer.serialize()
     get profile() {
         return this.getPrivateValue("profile");
     }
@@ -25,7 +25,7 @@ export class RevolvedNode extends ParameterShapeNode {
         this.setPropertyEmitShapeChanged("profile", value);
     }
 
-    @Serializer.serialze()
+    @Serializer.serialize()
     get axis() {
         return this.getPrivateValue("axis");
     }
@@ -33,7 +33,7 @@ export class RevolvedNode extends ParameterShapeNode {
         this.setPropertyEmitShapeChanged("axis", value);
     }
 
-    @Serializer.serialze()
+    @Serializer.serialize()
     get angle() {
         return this.getPrivateValue("angle");
     }

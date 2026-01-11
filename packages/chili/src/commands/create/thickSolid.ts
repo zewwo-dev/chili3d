@@ -19,8 +19,8 @@ export class ThickSolidCommand extends MultistepCommand {
     }
 
     protected override executeMainTask(): void {
-        Transaction.execute(this.document, `excute ${Object.getPrototypeOf(this).data.name}`, () => {
-            this.stepDatas[0].shapes.forEach((x) => {
+        Transaction.execute(this.document, `execute ${Object.getPrototypeOf(this).data.name}`, () => {
+            this.stepData[0].shapes.forEach((x) => {
                 const subShape = this.application.shapeFactory.makeThickSolidBySimple(
                     x.shape,
                     this.thickness,

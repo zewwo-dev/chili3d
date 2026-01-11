@@ -14,14 +14,14 @@ export class Plane {
     static readonly YZ: Plane = new Plane(XYZ.zero, XYZ.unitX, XYZ.unitY);
     static readonly ZX: Plane = new Plane(XYZ.zero, XYZ.unitY, XYZ.unitZ);
 
-    @Serializer.serialze()
+    @Serializer.serialize()
     readonly origin: XYZ;
     /**
      * unit vector
      */
-    @Serializer.serialze()
+    @Serializer.serialize()
     readonly normal: XYZ;
-    @Serializer.serialze()
+    @Serializer.serialize()
     readonly xvec: XYZ;
     readonly yvec: XYZ;
     constructor(origin: XYZ, normal: XYZ, xvec: XYZ) {

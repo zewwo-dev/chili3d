@@ -21,7 +21,7 @@ import type { ISnap, MouseAndDetected, SnapData, SnapResult } from "../snap";
 enum SnapState {
     Idle,
     Snapping,
-    Inputing,
+    Inputting,
     Cancelled,
     Completed,
 }
@@ -30,7 +30,7 @@ export abstract class SnapEventHandler<D extends SnapData = SnapData> implements
     private _tempPoint?: number;
     private _tempShapes?: number[];
     protected showTempPoint: boolean = true;
-    protected _snaped?: SnapResult;
+    protected _snapped?: SnapResult;
     private _state: SnapState = SnapState.Idle;
 
     facePreviewOpacity: number = 1;
@@ -47,15 +47,15 @@ export abstract class SnapEventHandler<D extends SnapData = SnapData> implements
         controller.onCompleted(() => this.handleSuccess());
     }
 
-    get snaped() {
-        return this._snaped;
+    get snapped() {
+        return this._snapped;
     }
     get state() {
         return this._state;
     }
 
     dispose() {
-        this._snaped = undefined;
+        this._snapped = undefined;
         this._state = SnapState.Completed;
     }
 
@@ -94,23 +94,23 @@ export abstract class SnapEventHandler<D extends SnapData = SnapData> implements
     }
 
     private updateSnapPoint(view: IView, event: PointerEvent) {
-        this.setSnaped(view, event);
-        if (this._snaped) {
-            this.showSnapPrompt(this._snaped);
+        this.setSnapped(view, event);
+        if (this._snapped) {
+            this.showSnapPrompt(this._snapped);
         } else {
             this.clearSnapPrompt();
         }
     }
 
     private updateVisualFeedback(view: IView) {
-        this.showTempShape(this._snaped?.point);
+        this.showTempShape(this._snapped?.point);
         view.document.visual.update();
     }
 
-    protected setSnaped(view: IView, event: PointerEvent) {
+    protected setSnapped(view: IView, event: PointerEvent) {
         this.findSnapPoint(ShapeType.Edge, view, event);
 
-        this.snaps.forEach((snap) => snap.handleSnaped?.(view.document.visual.document, this._snaped));
+        this.snaps.forEach((snap) => snap.handleSnapped?.(view.document.visual.document, this._snapped));
     }
 
     private findNearestFeaturePoint(view: IView, event: PointerEvent) {
@@ -133,7 +133,7 @@ export abstract class SnapEventHandler<D extends SnapData = SnapData> implements
     protected findSnapPoint(shapeType: ShapeType, view: IView, event: PointerEvent) {
         const featurePoint = this.findNearestFeaturePoint(view, event);
         if (featurePoint) {
-            this._snaped = {
+            this._snapped = {
                 view,
                 point: featurePoint.point,
                 info: featurePoint.prompt,
@@ -142,17 +142,17 @@ export abstract class SnapEventHandler<D extends SnapData = SnapData> implements
         } else {
             const detected = this.detectShapes(shapeType, view, event);
             for (const snap of this.snaps) {
-                const snaped = snap.snap(detected);
-                if (snaped && this.validateSnapPoint(snaped)) {
-                    this._snaped = snaped;
+                const snapped = snap.snap(detected);
+                if (snapped && this.validateSnapPoint(snapped)) {
+                    this._snapped = snapped;
                     return;
                 }
             }
         }
     }
 
-    private validateSnapPoint(snaped: SnapResult) {
-        return !this.data.validator || this.data.validator(snaped.point!);
+    private validateSnapPoint(snapped: SnapResult) {
+        return !this.data.validator || this.data.validator(snapped.point!);
     }
 
     private detectShapes(shapeType: ShapeType, view: IView, event: MouseEvent): MouseAndDetected {
@@ -164,8 +164,8 @@ export abstract class SnapEventHandler<D extends SnapData = SnapData> implements
         PubSub.default.pub("clearFloatTip");
     }
 
-    protected showSnapPrompt(snaped: SnapResult) {
-        const prompt = this.formatSnapPrompt(snaped);
+    protected showSnapPrompt(snapped: SnapResult) {
+        const prompt = this.formatSnapPrompt(snapped);
         if (!prompt) {
             this.clearSnapPrompt();
             return;
@@ -174,23 +174,23 @@ export abstract class SnapEventHandler<D extends SnapData = SnapData> implements
     }
 
     protected formatSnapPrompt(
-        snaped: SnapResult,
+        snapped: SnapResult,
     ): HTMLElement | { level: MessageType; msg: string } | undefined {
-        let prompt = this.data.prompt?.(snaped);
+        let prompt = this.data.prompt?.(snapped);
         if (!prompt) {
-            const distance = snaped.distance ?? snaped.refPoint?.distanceTo(snaped.point!);
+            const distance = snapped.distance ?? snapped.refPoint?.distanceTo(snapped.point!);
             if (distance) {
                 prompt = this.formatSnapDistance(distance);
             }
         }
 
-        if (!prompt && !snaped.info) {
+        if (!prompt && !snapped.info) {
             return undefined;
         }
 
         return {
             level: MessageType.info,
-            msg: [snaped.info, prompt].filter((x) => x !== undefined).join(" -> "),
+            msg: [snapped.info, prompt].filter((x) => x !== undefined).join(" -> "),
         };
     }
 
@@ -232,7 +232,7 @@ export abstract class SnapEventHandler<D extends SnapData = SnapData> implements
 
     pointerDown(view: IView, event: PointerEvent): void {
         if (event.pointerType === "mouse" && event.button === 0) {
-            if (this._snaped) {
+            if (this._snapped) {
                 this.handleSuccess();
             } else {
                 PubSub.default.pub("showToast", "toast.snap.notFoundValidPoint");
@@ -241,13 +241,13 @@ export abstract class SnapEventHandler<D extends SnapData = SnapData> implements
     }
 
     pointerUp(view: IView, event: PointerEvent): void {
-        if (event.pointerType !== "mouse" && event.isPrimary && this._snaped) {
+        if (event.pointerType !== "mouse" && event.isPrimary && this._snapped) {
             this.handleSuccess();
         }
     }
 
     pointerOut(view: IView, event: PointerEvent) {
-        this._snaped = undefined;
+        this._snapped = undefined;
     }
 
     mouseWheel(view: IView, event: WheelEvent): void {
@@ -257,11 +257,11 @@ export abstract class SnapEventHandler<D extends SnapData = SnapData> implements
     keyDown(view: IView, event: KeyboardEvent): void {
         switch (event.key) {
             case "Escape":
-                this._snaped = undefined;
+                this._snapped = undefined;
                 this.handleCancel();
                 break;
             case "Enter":
-                this._snaped = undefined;
+                this._snapped = undefined;
                 this.handleSuccess();
                 break;
             default:
@@ -272,12 +272,12 @@ export abstract class SnapEventHandler<D extends SnapData = SnapData> implements
     private handleNumericInput(view: IView, event: KeyboardEvent) {
         if (!["#", "-", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9"].includes(event.key)) return;
 
-        this._state = SnapState.Inputing;
+        this._state = SnapState.Inputting;
         PubSub.default.pub("showInput", event.key, (text: string) => {
             const error = this.inputError(text);
             if (error) return Result.err(error);
 
-            this._snaped = this.getPointFromInput(view, text);
+            this._snapped = this.getPointFromInput(view, text);
             this.handleSuccess();
             return Result.ok(text);
         });

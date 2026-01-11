@@ -86,7 +86,7 @@ class ViewActiveConverter implements IConverter<IView> {
     }
 }
 
-class ActivedRibbonTabConverter implements IConverter<RibbonTabData> {
+class ActiveRibbonTabConverter implements IConverter<RibbonTabData> {
     constructor(
         readonly tab: RibbonTabData,
         readonly style: string,
@@ -150,7 +150,7 @@ export class Ribbon extends HTMLElement {
         return collection({
             sources: this.dataContent.ribbonTabs,
             template: (tab: RibbonTabData) => {
-                const converter = new ActivedRibbonTabConverter(tab, style.tabHeader, style.activedTab);
+                const converter = new ActiveRibbonTabConverter(tab, style.tabHeader, style.activeTab);
                 return label({
                     className: new Binding(this.dataContent, "activeTab", converter),
                     textContent: new Localize(tab.tabName),

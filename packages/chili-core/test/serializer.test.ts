@@ -9,13 +9,13 @@ class TestObject {
     protected k2: string = "k2";
     public k3: string = "k3";
 
-    @Serializer.serialze()
+    @Serializer.serialize()
     private k1: string;
-    @Serializer.serialze()
+    @Serializer.serialize()
     private k4: string = "k4";
-    @Serializer.serialze()
+    @Serializer.serialize()
     protected k5: string = "k5";
-    @Serializer.serialze()
+    @Serializer.serialize()
     public k6: string = "k6";
 
     constructor(k1: string) {

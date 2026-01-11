@@ -7,12 +7,12 @@ import { XYZ } from "./xyz";
 
 @Serializer.register(["point", "direction"])
 export class Line {
-    @Serializer.serialze()
+    @Serializer.serialize()
     readonly point: XYZ;
     /**
      * unit vector
      */
-    @Serializer.serialze()
+    @Serializer.serialize()
     readonly direction: XYZ;
 
     constructor(location: XYZ, direction: XYZ) {
@@ -34,9 +34,9 @@ export class Line {
     }
 
     distanceTo(right: Line): number {
-        const neareast1 = this.nearestTo(right);
-        const neareast2 = right.nearestToPoint(neareast1);
-        return neareast1.distanceTo(neareast2);
+        const nearest1 = this.nearestTo(right);
+        const nearest2 = right.nearestToPoint(nearest1);
+        return nearest1.distanceTo(nearest2);
     }
 
     nearestTo(right: Line): XYZ {

@@ -13,12 +13,12 @@ import {
 } from "chili-core";
 
 @Serializer.register(["document", "normal", "center", "radius", "dz"])
-export class ConeNode extends ParameterShapeNode {
+export class CylinderNode extends ParameterShapeNode {
     override display(): I18nKeys {
-        return "body.cone";
+        return "body.cylinder";
     }
 
-    @Serializer.serialze()
+    @Serializer.serialize()
     @Property.define("circle.center")
     get center() {
         return this.getPrivateValue("center");
@@ -27,7 +27,7 @@ export class ConeNode extends ParameterShapeNode {
         this.setPropertyEmitShapeChanged("center", center);
     }
 
-    @Serializer.serialze()
+    @Serializer.serialize()
     @Property.define("circle.radius")
     get radius() {
         return this.getPrivateValue("radius");
@@ -36,7 +36,7 @@ export class ConeNode extends ParameterShapeNode {
         this.setPropertyEmitShapeChanged("radius", dy);
     }
 
-    @Serializer.serialze()
+    @Serializer.serialize()
     @Property.define("box.dz")
     get dz() {
         return this.getPrivateValue("dz");
@@ -45,7 +45,7 @@ export class ConeNode extends ParameterShapeNode {
         this.setPropertyEmitShapeChanged("dz", dz);
     }
 
-    @Serializer.serialze()
+    @Serializer.serialize()
     get normal(): XYZ {
         return this.getPrivateValue("normal");
     }
@@ -59,6 +59,11 @@ export class ConeNode extends ParameterShapeNode {
     }
 
     generateShape(): Result<IShape> {
-        return this.document.application.shapeFactory.cone(this.normal, this.center, this.radius, 0, this.dz);
+        return this.document.application.shapeFactory.cylinder(
+            this.normal,
+            this.center,
+            this.radius,
+            this.dz,
+        );
     }
 }

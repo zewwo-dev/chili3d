@@ -22,13 +22,13 @@ import { MultistepCommand } from "../multistepCommand";
 })
 export class Break extends MultistepCommand {
     protected override executeMainTask() {
-        Transaction.execute(this.document, `excute ${Object.getPrototypeOf(this).data.name}`, () => {
-            const shape = this.stepDatas[0].shapes[0].shape as IEdge;
+        Transaction.execute(this.document, `execute ${Object.getPrototypeOf(this).data.name}`, () => {
+            const shape = this.stepData[0].shapes[0].shape as IEdge;
             const curve = shape.curve;
-            const point = this.stepDatas[0].shapes[0].owner.node
+            const point = this.stepData[0].shapes[0].owner.node
                 .worldTransform()
                 .invert()!
-                .ofPoint(this.stepDatas[1].point!);
+                .ofPoint(this.stepData[1].point!);
             const parameter = curve.parameter(point, 1e-3);
             if (parameter === undefined) return;
 
@@ -36,7 +36,7 @@ export class Break extends MultistepCommand {
             curve.setTrim(curve.firstParameter(), parameter);
             shape.update(curve);
 
-            const model = this.stepDatas[0].nodes![0] as ShapeNode;
+            const model = this.stepData[0].nodes![0] as ShapeNode;
             const model1 = new EditableShapeNode(this.document, `${model.name}_1`, shape);
             const model2 = new EditableShapeNode(this.document, `${model.name}_2`, curve2.makeEdge());
             model1.transform = model.transform;
@@ -59,9 +59,9 @@ export class Break extends MultistepCommand {
     }
 
     private readonly handlePointData = () => {
-        const edge = this.stepDatas[0].shapes[0].shape as IEdge;
+        const edge = this.stepData[0].shapes[0].shape as IEdge;
         const curve = edge.curve.transformed(
-            edge.matrix.multiply(this.stepDatas[0].shapes[0].transform),
+            edge.matrix.multiply(this.stepData[0].shapes[0].transform),
         ) as ITrimmedCurve;
         this.disposeStack.add(curve);
 

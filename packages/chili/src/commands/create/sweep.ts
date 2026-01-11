@@ -2,7 +2,7 @@
 // See LICENSE file in the project root for full license information.
 
 import { command, type GeometryNode, type IWire, Property, ShapeType } from "chili-core";
-import { SweepedNode } from "../../bodys";
+import { SweepedNode } from "../../bodies";
 import type { IStep } from "../../step";
 import { SelectShapeStep } from "../../step/selectStep";
 import { CreateCommand } from "../createCommand";
@@ -22,8 +22,8 @@ export class Sweep extends CreateCommand {
     }
 
     protected override geometryNode(): GeometryNode {
-        const path = this.transformdFirstShape(this.stepDatas[0], false) as IWire;
-        const shapes = this.transformdShapes(this.stepDatas[1], false) as IWire[];
+        const path = this.transformedFirstShape(this.stepData[0], false) as IWire;
+        const shapes = this.transformedShapes(this.stepData[1], false) as IWire[];
         return new SweepedNode(this.document, shapes, path, this.round);
     }
 

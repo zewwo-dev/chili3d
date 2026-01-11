@@ -12,7 +12,7 @@ import {
     type ShapeMeshData,
     type XYZ,
 } from "chili-core";
-import { PolygonNode } from "../../bodys";
+import { PolygonNode } from "../../bodies";
 import { Dimension, type PointSnapData, type SnapResult } from "../../snap";
 import { type IStep, PointStep } from "../../step";
 import { CreateFaceableCommand } from "../createCommand";
@@ -30,7 +30,7 @@ export class Polygon extends CreateFaceableCommand {
     protected override geometryNode(): GeometryNode {
         const node = new PolygonNode(
             this.document,
-            this.stepDatas.map((step) => step.point!),
+            this.stepData.map((step) => step.point!),
         );
         node.isFace = this.isFace;
         return node;
@@ -47,7 +47,7 @@ export class Polygon extends CreateFaceableCommand {
             if (data === undefined) {
                 return this.controller.result?.status === "success";
             }
-            this.stepDatas.push(data);
+            this.stepData.push(data);
             if (this.isClose(data)) {
                 return true;
             }
@@ -56,8 +56,7 @@ export class Polygon extends CreateFaceableCommand {
 
     private isClose(data: SnapResult) {
         return (
-            this.stepDatas.length > 1 &&
-            this.stepDatas[0].point!.distanceTo(data.point!) <= Precision.Distance
+            this.stepData.length > 1 && this.stepData[0].point!.distanceTo(data.point!) <= Precision.Distance
         );
     }
 
@@ -69,24 +68,24 @@ export class Polygon extends CreateFaceableCommand {
 
     private readonly getNextData = (): PointSnapData => {
         return {
-            refPoint: () => this.stepDatas.at(-1)!.point!,
+            refPoint: () => this.stepData.at(-1)!.point!,
             dimension: Dimension.D1D2D3,
             validator: this.validator,
             preview: this.preview,
             featurePoints: [
                 {
-                    point: this.stepDatas.at(0)!.point!,
+                    point: this.stepData.at(0)!.point!,
                     prompt: I18n.translate("prompt.polygon.close"),
-                    when: () => this.stepDatas.length > 2,
+                    when: () => this.stepData.length > 2,
                 },
             ],
         };
     };
 
     private readonly preview = (point: XYZ | undefined): ShapeMeshData[] => {
-        const ps = this.stepDatas.map((data) => this.meshPoint(data.point!));
+        const ps = this.stepData.map((data) => this.meshPoint(data.point!));
         const edges = new EdgeMeshDataBuilder();
-        this.stepDatas.forEach((data) => edges.addPosition(data.point!.x, data.point!.y, data.point!.z));
+        this.stepData.forEach((data) => edges.addPosition(data.point!.x, data.point!.y, data.point!.z));
         if (point) {
             edges.addPosition(point.x, point.y, point.z);
         }
@@ -94,7 +93,7 @@ export class Polygon extends CreateFaceableCommand {
     };
 
     private readonly validator = (point: XYZ): boolean => {
-        for (const data of this.stepDatas) {
+        for (const data of this.stepData) {
             if (point.distanceTo(data.point!) < 0.001) {
                 return false;
             }

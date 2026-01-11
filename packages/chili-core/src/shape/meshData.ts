@@ -9,11 +9,11 @@ import type { ISubShape } from "./shape";
 
 @Serializer.register(["start", "count", "materialIndex"])
 export class MeshGroup {
-    @Serializer.serialze()
+    @Serializer.serialize()
     start: number;
-    @Serializer.serialze()
+    @Serializer.serialize()
     count: number;
-    @Serializer.serialze()
+    @Serializer.serialize()
     materialIndex: number;
 
     constructor(start: number, count: number, materialIndex: number) {
@@ -23,7 +23,7 @@ export class MeshGroup {
     }
 }
 
-export type MeshType = "surface" | "linesegments";
+export type MeshType = "surface" | "lineSegments";
 
 @Serializer.register([])
 export class Mesh {
@@ -39,30 +39,30 @@ export class Mesh {
 
     static createLineSegments(size: number) {
         const mesh = new Mesh();
-        mesh.meshType = "linesegments";
+        mesh.meshType = "lineSegments";
         mesh.position = new Float32Array(size * 3);
         return mesh;
     }
 
-    @Serializer.serialze()
-    meshType: MeshType = "linesegments";
+    @Serializer.serialize()
+    meshType: MeshType = "lineSegments";
 
-    @Serializer.serialze()
+    @Serializer.serialize()
     position: Float32Array | undefined;
 
-    @Serializer.serialze()
+    @Serializer.serialize()
     normal: Float32Array | undefined = undefined;
 
-    @Serializer.serialze()
+    @Serializer.serialize()
     index: Uint32Array | undefined = undefined;
 
-    @Serializer.serialze()
+    @Serializer.serialize()
     color: number | number[] = 0xfff;
 
-    @Serializer.serialze()
+    @Serializer.serialize()
     uv: Float32Array | undefined = undefined;
 
-    @Serializer.serialze()
+    @Serializer.serialize()
     groups: MeshGroup[] = [];
 }
 

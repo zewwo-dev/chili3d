@@ -19,7 +19,7 @@ export class FaceNode extends ParameterShapeNode {
         return "body.face";
     }
 
-    @Serializer.serialze()
+    @Serializer.serialize()
     get shapes(): IEdge[] | IWire[] {
         return this.getPrivateValue("shapes");
     }

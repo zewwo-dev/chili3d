@@ -15,7 +15,7 @@ import { XYZ, type XYZLike } from "./xyz";
 })
 export class Matrix4 {
     private readonly _array: Float32Array = new Float32Array(16);
-    @Serializer.serialze()
+    @Serializer.serialize()
     get array(): ReadonlyArray<number> {
         return [...this._array];
     }

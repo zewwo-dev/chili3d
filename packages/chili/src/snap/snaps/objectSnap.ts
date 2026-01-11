@@ -55,8 +55,8 @@ export class ObjectSnap extends BaseSnap {
         Config.instance.removePropertyChanged(this.onSnapTypeChanged);
     }
 
-    readonly handleSnaped = (document: IDocument, snaped?: SnapResult | undefined) => {
-        if (snaped?.shapes.length === 0 && this._lastDetected) {
+    readonly handleSnapped = (document: IDocument, snapped?: SnapResult | undefined) => {
+        if (snapped?.shapes.length === 0 && this._lastDetected) {
             this.displayHint(this._lastDetected[0], this._lastDetected[1]);
             this._lastDetected = undefined;
         }
@@ -90,7 +90,7 @@ export class ObjectSnap extends BaseSnap {
             this.showInvisibleSnaps(data.view, data.shapes[0]);
             snap = this.snapOnShape(data.view, data.mx, data.my, data.shapes);
         } else {
-            snap = this.snapeInvisible(data.view, data.mx, data.my);
+            snap = this.snapInvisible(data.view, data.mx, data.my);
         }
         if (this.referencePoint && snap?.point) {
             snap.distance = this.referencePoint().distanceTo(snap.point);
@@ -110,7 +110,7 @@ export class ObjectSnap extends BaseSnap {
 
         const dist = IView.screenDistance(view, x, y, ordered[0].point!);
         if (dist < Config.instance.SnapDistance) {
-            this.hilighted(view, ordered[0].shapes);
+            this.highlighted(view, ordered[0].shapes);
             return ordered[0];
         } else {
             this._lastDetected = [view, ordered[0]];
@@ -119,7 +119,7 @@ export class ObjectSnap extends BaseSnap {
     }
 
     private displayHint(view: IView, shape: SnapResult) {
-        this.hilighted(view, shape.shapes);
+        this.highlighted(view, shape.shapes);
         const data = VertexMeshData.from(
             shape.point!,
             VisualConfig.hintVertexSize,
@@ -128,10 +128,10 @@ export class ObjectSnap extends BaseSnap {
         this._hintVertex = [view.document.visual.context, view.document.visual.context.displayMesh([data])];
     }
 
-    private snapeInvisible(view: IView, x: number, y: number): SnapResult | undefined {
+    private snapInvisible(view: IView, x: number, y: number): SnapResult | undefined {
         const { minDistance, snap } = this.getNearestInvisibleSnap(view, x, y);
         if (minDistance < Config.instance.SnapDistance) {
-            this.hilighted(view, snap!.shapes);
+            this.highlighted(view, snap!.shapes);
             return snap;
         }
         return undefined;
@@ -190,7 +190,7 @@ export class ObjectSnap extends BaseSnap {
         });
     }
 
-    private hilighted(view: IView, shapes: VisualShapeData[]) {
+    private highlighted(view: IView, shapes: VisualShapeData[]) {
         this.highlight(shapes);
     }
 

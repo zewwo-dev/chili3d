@@ -9,7 +9,7 @@ import { Node } from "./node";
 export abstract class VisualNode extends Node {
     abstract display(): I18nKeys;
 
-    @Serializer.serialze()
+    @Serializer.serialize()
     get transform(): Matrix4 {
         return this.getPrivateValue("transform", Matrix4.identity());
     }

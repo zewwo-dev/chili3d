@@ -93,12 +93,12 @@ export class MultiShapeMesh implements IShapeMeshData {
 
     public addShape(shape: IShape, matrix: Matrix4) {
         const mesh = shape.mesh;
-        const totleMatrix = shape.matrix.multiply(matrix);
+        const totalMatrix = shape.matrix.multiply(matrix);
         if (mesh.faces) {
-            MeshUtils.combineFaceMeshData(this._faces, mesh.faces, totleMatrix);
+            MeshUtils.combineFaceMeshData(this._faces, mesh.faces, totalMatrix);
         }
         if (mesh.edges) {
-            MeshUtils.combineEdgeMeshData(this._edges, mesh.edges, totleMatrix);
+            MeshUtils.combineEdgeMeshData(this._edges, mesh.edges, totalMatrix);
         }
     }
 }
@@ -106,7 +106,7 @@ export class MultiShapeMesh implements IShapeMeshData {
 @Serializer.register(["document", "name", "shapes", "materialId", "id"])
 export class MultiShapeNode extends GeometryNode {
     private readonly _shapes: IShape[];
-    @Serializer.serialze()
+    @Serializer.serialize()
     get shapes(): ReadonlyArray<IShape> {
         return this._shapes;
     }
@@ -173,7 +173,7 @@ export class EditableShapeNode extends ShapeNode {
         return "body.editableShape";
     }
 
-    @Serializer.serialze()
+    @Serializer.serialize()
     override get shape() {
         return this._shape;
     }

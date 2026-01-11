@@ -19,10 +19,10 @@ import { MultistepCommand } from "../multistepCommand";
     icon: "icon-split",
 })
 export class Split extends MultistepCommand {
-    private splitedShape() {
-        const shape1 = this.stepDatas[0].shapes[0].shape;
-        const invertTransform = this.stepDatas[0].shapes[0].transform.invert()!;
-        const edges = this.stepDatas[1].shapes.map((x) =>
+    private splitShape() {
+        const shape1 = this.stepData[0].shapes[0].shape;
+        const invertTransform = this.stepData[0].shapes[0].transform.invert()!;
+        const edges = this.stepData[1].shapes.map((x) =>
             x.shape.transformedMul(x.transform.multiply(invertTransform)),
         ) as IEdge[];
         const result = shape1.split(edges);
@@ -33,9 +33,9 @@ export class Split extends MultistepCommand {
     }
 
     protected override executeMainTask() {
-        Transaction.execute(this.document, `excute ${Object.getPrototypeOf(this).data.name}`, () => {
-            const old = this.stepDatas[0].nodes![0];
-            const shape = this.splitedShape();
+        Transaction.execute(this.document, `execute ${Object.getPrototypeOf(this).data.name}`, () => {
+            const old = this.stepData[0].nodes![0];
+            const shape = this.splitShape();
             const subShapes = shape.iterShape();
             if (subShapes.length > 1) {
                 let i = 1;
@@ -53,8 +53,8 @@ export class Split extends MultistepCommand {
             }
 
             this.removeModels(
-                this.stepDatas[0].shapes[0].owner,
-                ...this.stepDatas[1].shapes.map((x) => x.owner),
+                this.stepData[0].shapes[0].owner,
+                ...this.stepData[1].shapes.map((x) => x.owner),
             );
             this.document.visual.update();
         });

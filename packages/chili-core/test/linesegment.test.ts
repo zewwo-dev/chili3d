@@ -3,7 +3,7 @@
 
 import { LineSegment, XYZ } from "../src";
 
-describe("test linesegment", () => {
+describe("test lineSegment", () => {
     test("test constructor", () => {
         const start = new XYZ(0, 0, 0);
         const end = new XYZ(1, 0, 0);

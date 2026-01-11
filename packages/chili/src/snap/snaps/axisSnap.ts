@@ -37,13 +37,13 @@ export class AxisSnap implements ISnap {
 
     private showTempLine(view: IView, dot: number) {
         const dist = Math.abs(dot) < 0.000001 ? 1e15 : 1e15 * dot;
-        const lineDats = EdgeMeshData.from(
+        const lineData = EdgeMeshData.from(
             this.point,
             this.point.add(this.direction.multiply(dist)),
             VisualConfig.temporaryEdgeColor,
             LineType.Dash,
         );
-        const id = view.document.visual.context.displayMesh([lineDats]);
+        const id = view.document.visual.context.displayMesh([lineData]);
         this._tempLines = [view, id];
     }
 

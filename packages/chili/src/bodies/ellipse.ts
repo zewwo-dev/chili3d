@@ -18,7 +18,7 @@ export class EllipseNode extends FacebaseNode {
         return "body.ellipse";
     }
 
-    @Serializer.serialze()
+    @Serializer.serialize()
     @Property.define("circle.center")
     get center() {
         return this.getPrivateValue("center");
@@ -27,7 +27,7 @@ export class EllipseNode extends FacebaseNode {
         this.setPropertyEmitShapeChanged("center", center);
     }
 
-    @Serializer.serialze()
+    @Serializer.serialize()
     @Property.define("ellipse.majorRadius")
     get majorRadius() {
         return this.getPrivateValue("majorRadius");
@@ -35,7 +35,7 @@ export class EllipseNode extends FacebaseNode {
     set majorRadius(radius: number) {
         this.setPropertyEmitShapeChanged("majorRadius", radius);
     }
-    @Serializer.serialze()
+    @Serializer.serialize()
     @Property.define("ellipse.minorRadius")
     get minorRadius() {
         return this.getPrivateValue("minorRadius");
@@ -44,12 +44,12 @@ export class EllipseNode extends FacebaseNode {
         this.setPropertyEmitShapeChanged("minorRadius", radius);
     }
 
-    @Serializer.serialze()
+    @Serializer.serialize()
     get normal(): XYZ {
         return this.getPrivateValue("normal");
     }
 
-    @Serializer.serialze()
+    @Serializer.serialize()
     get xvec(): XYZ {
         return this.getPrivateValue("xvec");
     }

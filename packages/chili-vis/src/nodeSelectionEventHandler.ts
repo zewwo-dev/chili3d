@@ -49,7 +49,7 @@ export class NodeSelectionHandler extends SelectionHandler {
         return event.shiftKey;
     }
 
-    getDetecteds(view: IView, event: PointerEvent) {
+    getDetected(view: IView, event: PointerEvent) {
         if (
             this.rect &&
             Math.abs(this.mouse.x - event.offsetX) > 3 &&
@@ -70,11 +70,11 @@ export class NodeSelectionHandler extends SelectionHandler {
 
     private getDetecting() {
         if (!this._detectAtMouse) return undefined;
-        const index = this._lockDetected ? this.getDetcedtingIndex() : 0;
+        const index = this._lockDetected ? this.getDetectingIndex() : 0;
         return this._detectAtMouse[index] || undefined;
     }
 
-    private getDetcedtingIndex() {
+    private getDetectingIndex() {
         if (!this._detectAtMouse) return -1;
         for (let i = 0; i < this._detectAtMouse.length; i++) {
             if (this._lockDetected === this._detectAtMouse[i]) {
@@ -85,16 +85,16 @@ export class NodeSelectionHandler extends SelectionHandler {
     }
 
     protected override setHighlight(view: IView, event: PointerEvent) {
-        const detecteds = this.getDetecteds(view, event);
-        this.highlightDetecteds(view, detecteds);
+        const detected = this.getDetected(view, event);
+        this.highlightDetected(view, detected);
     }
 
-    private highlightDetecteds(view: IView, detecteds: IVisualObject[]) {
+    private highlightDetected(view: IView, detected: IVisualObject[]) {
         this.cleanHighlights();
-        detecteds.forEach((x) => {
+        detected.forEach((x) => {
             view.document.visual.highlighter.addState(x, this.highlighState, ShapeType.Shape);
         });
-        this._highlights = detecteds;
+        this._highlights = detected;
         view.update();
     }
 
@@ -108,11 +108,11 @@ export class NodeSelectionHandler extends SelectionHandler {
     protected override highlightNext(view: IView): void {
         if (this._detectAtMouse && this._detectAtMouse.length > 1) {
             const index = this._lockDetected
-                ? (this.getDetcedtingIndex() + 1) % this._detectAtMouse.length
+                ? (this.getDetectingIndex() + 1) % this._detectAtMouse.length
                 : 1;
             this._lockDetected = this._detectAtMouse[index];
             const detected = this.getDetecting();
-            if (detected) this.highlightDetecteds(view, [detected]);
+            if (detected) this.highlightDetected(view, [detected]);
         }
     }
 

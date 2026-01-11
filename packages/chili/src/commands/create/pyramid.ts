@@ -2,7 +2,7 @@
 // See LICENSE file in the project root for full license information.
 
 import { command, type GeometryNode, type Plane, type XYZ } from "chili-core";
-import { PyramidNode } from "../../bodys";
+import { PyramidNode } from "../../bodies";
 import type { LengthAtAxisSnapData } from "../../snap";
 import { type IStep, LengthAtAxisStep } from "../../step";
 import { RectCommandBase } from "./rect";
@@ -19,11 +19,11 @@ export class Pyramid extends RectCommandBase {
     }
 
     private readonly getHeightStepData = (): LengthAtAxisSnapData => {
-        const plane = this.stepDatas[1].plane;
+        const plane = this.stepData[1].plane;
         if (plane === undefined) {
             throw new Error("plane is undefined, please report bug");
         }
-        const point = this.stepDatas[1].point!.add(this.stepDatas[0].point!).multiply(0.5);
+        const point = this.stepData[1].point!.add(this.stepData[0].point!).multiply(0.5);
         return {
             point,
             direction: plane.normal,
@@ -33,20 +33,20 @@ export class Pyramid extends RectCommandBase {
 
     private readonly previewPyramid = (end: XYZ | undefined) => {
         if (!end) {
-            return this.previewRect(this.stepDatas[1].point);
+            return this.previewRect(this.stepData[1].point);
         }
 
         const data = this.rectDataFromTwoSteps();
         return [
-            this.meshPoint(this.stepDatas[0].point!),
-            this.meshPoint(this.stepDatas[1].point!),
+            this.meshPoint(this.stepData[0].point!),
+            this.meshPoint(this.stepData[1].point!),
             this.meshCreatedShape("pyramid", data.plane, data.dx, data.dy, this.getHeight(data.plane, end)),
         ];
     };
 
     protected override geometryNode(): GeometryNode {
         const rect = this.rectDataFromTwoSteps();
-        const dz = this.getHeight(rect.plane, this.stepDatas[2].point!);
+        const dz = this.getHeight(rect.plane, this.stepData[2].point!);
         return new PyramidNode(this.document, rect.plane, rect.dx, rect.dy, dz);
     }
 

@@ -20,10 +20,10 @@ export interface IVisualContext extends IDisposable {
     redrawNode(nodes: INode[]): void;
     setVisible(node: INode, visible: boolean): void;
     visuals(): IVisualObject[];
-    displayMesh(datas: ShapeMeshData[], opacity?: number): number;
+    displayMesh(data: ShapeMeshData[], opacity?: number): number;
     removeMesh(id: number): void;
-    displayInstancedMesh(data: MeshLike, matrixs: Matrix4[], opacity?: number): number;
+    displayInstancedMesh(data: MeshLike, matrices: Matrix4[], opacity?: number): number;
     displayLineSegments(data: EdgeMeshData): number;
     setPosition(id: number, position: Float32Array): void;
-    setInstanceMatrix(id: number, matrixs: Matrix4[]): void;
+    setInstanceMatrix(id: number, matrices: Matrix4[]): void;
 }

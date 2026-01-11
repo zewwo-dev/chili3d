@@ -19,9 +19,9 @@ import { MultistepCommand } from "../multistepCommand";
 })
 export class RemoveFaceCommand extends MultistepCommand {
     protected override executeMainTask() {
-        Transaction.execute(this.document, `excute ${Object.getPrototypeOf(this).data.name}`, () => {
-            const node = this.stepDatas[0].shapes[0].owner.node as ShapeNode;
-            const faces = this.stepDatas.at(-1)!.shapes.map((x) => x.shape as IFace);
+        Transaction.execute(this.document, `execute ${Object.getPrototypeOf(this).data.name}`, () => {
+            const node = this.stepData[0].shapes[0].owner.node as ShapeNode;
+            const faces = this.stepData.at(-1)!.shapes.map((x) => x.shape as IFace);
             const filetShape = this.document.application.shapeFactory.removeFeature(node.shape.value, faces);
 
             const model = new EditableShapeNode(this.document, node.name, filetShape, node.materialId);

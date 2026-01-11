@@ -96,7 +96,7 @@ export class AlignToPlane implements ICommand {
 export class FromSection extends MultistepCommand {
     protected override executeMainTask() {
         const curve = this.transformedCurve();
-        const point = this.stepDatas[1].point!;
+        const point = this.stepData[1].point!;
 
         const parameter = curve.parameter(point, 1e-3);
         if (parameter === undefined) return;
@@ -128,8 +128,8 @@ export class FromSection extends MultistepCommand {
     }
 
     private transformedCurve() {
-        const shape = this.stepDatas[0].shapes[0].shape as IEdge;
-        const matrix = shape.matrix.multiply(this.stepDatas[0].shapes[0].transform);
+        const shape = this.stepData[0].shapes[0].shape as IEdge;
+        const matrix = shape.matrix.multiply(this.stepData[0].shapes[0].transform);
         const curve = shape.curve.transformed(matrix) as ICurve;
         this.disposeStack.add(curve);
         return curve;

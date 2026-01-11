@@ -12,8 +12,8 @@ import { MultistepCommand } from "../multistepCommand";
 })
 export class Section extends MultistepCommand {
     protected override executeMainTask() {
-        const shape = this.transformdFirstShape(this.stepDatas[0]);
-        const path = this.transformdFirstShape(this.stepDatas[1]);
+        const shape = this.transformedFirstShape(this.stepData[0]);
+        const path = this.transformedFirstShape(this.stepData[1]);
         const section = shape.section(path);
         const node = new EditableShapeNode(this.document, I18n.translate("command.create.section"), section);
         this.document.modelManager.rootNode.add(node);

@@ -13,7 +13,7 @@ import {
     Property,
     ShapeType,
 } from "chili-core";
-import { RevolvedNode } from "../../bodys";
+import { RevolvedNode } from "../../bodies";
 import type { IStep } from "../../step";
 import { SelectShapeStep } from "../../step/selectStep";
 import { CreateCommand } from "../createCommand";
@@ -32,9 +32,9 @@ export class Revolve extends CreateCommand {
     }
 
     protected override geometryNode(): GeometryNode {
-        const shape = this.transformdFirstShape(this.stepDatas[0], false);
-        const edge = (this.stepDatas[1].shapes[0].shape as IEdge).curve.basisCurve as ILine;
-        const transform = this.stepDatas[1].shapes[0].transform;
+        const shape = this.transformedFirstShape(this.stepData[0], false);
+        const edge = (this.stepData[1].shapes[0].shape as IEdge).curve.basisCurve as ILine;
+        const transform = this.stepData[1].shapes[0].transform;
         const axis = new Line(transform.ofPoint(edge.value(0)), transform.ofVector(edge.direction));
         return new RevolvedNode(this.document, shape, axis, this.angle);
     }

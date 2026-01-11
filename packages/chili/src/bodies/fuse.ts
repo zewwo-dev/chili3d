@@ -16,7 +16,7 @@ export class FuseNode extends ParameterShapeNode {
         return "body.fuse";
     }
 
-    @Serializer.serialze()
+    @Serializer.serialize()
     get bottom(): IShape {
         return this.getPrivateValue("bottom");
     }
@@ -24,7 +24,7 @@ export class FuseNode extends ParameterShapeNode {
         this.setPropertyEmitShapeChanged("bottom", value);
     }
 
-    @Serializer.serialze()
+    @Serializer.serialize()
     get top(): IShape {
         return this.getPrivateValue("top");
     }

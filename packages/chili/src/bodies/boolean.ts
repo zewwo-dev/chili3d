@@ -13,10 +13,10 @@ import {
 @Serializer.register(["document", "booleanShape"])
 export class BooleanNode extends ParameterShapeNode {
     override display(): I18nKeys {
-        return "body.bolean";
+        return "body.boolean";
     }
 
-    @Serializer.serialze()
+    @Serializer.serialize()
     get booleanShape(): IShape {
         return this.getPrivateValue("booleanShape");
     }

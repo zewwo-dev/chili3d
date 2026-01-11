@@ -4,7 +4,7 @@
 import type { IDocument, IVisual, IVisualFactory } from "chili-core";
 import { ThreeVisual } from "./threeVisual";
 
-export class ThreeVisulFactory implements IVisualFactory {
+export class ThreeVisualFactory implements IVisualFactory {
     readonly kernelName = "three";
     create(document: IDocument): IVisual {
         return new ThreeVisual(document);

@@ -12,10 +12,10 @@ import { VisualNode } from "./visualNode";
 
 @Serializer.register(["faceIndex", "materialIndex"])
 export class FaceMaterialPair {
-    @Serializer.serialze()
+    @Serializer.serialize()
     faceIndex: number;
 
-    @Serializer.serialze()
+    @Serializer.serialize()
     materialIndex: number;
     constructor(faceIndex: number, materialIndex: number) {
         this.faceIndex = faceIndex;
@@ -24,7 +24,7 @@ export class FaceMaterialPair {
 }
 
 export abstract class GeometryNode extends VisualNode {
-    @Serializer.serialze()
+    @Serializer.serialize()
     @Property.define("common.material", { type: "materialId" })
     get materialId(): string | string[] {
         return this.getPrivateValue("materialId");
@@ -35,14 +35,14 @@ export abstract class GeometryNode extends VisualNode {
 
     protected _originFaceMesh?: FaceMeshData;
 
-    @Serializer.serialze()
+    @Serializer.serialize()
     get faceMaterialPair(): FaceMaterialPair[] {
         return this.getPrivateValue("faceMaterialPair", []);
     }
     set faceMaterialPair(value: FaceMaterialPair[]) {
-        const oldMaterisl = Array.isArray(this.materialId) ? [...this.materialId] : this.materialId;
+        const oldMaterial = Array.isArray(this.materialId) ? [...this.materialId] : this.materialId;
         const Face = [...this.faceMaterialPair];
-        this.setProperty("faceMaterialPair", value, () => this.updateVisual(oldMaterisl, Face));
+        this.setProperty("faceMaterialPair", value, () => this.updateVisual(oldMaterial, Face));
     }
 
     constructor(
@@ -152,7 +152,7 @@ export abstract class GeometryNode extends VisualNode {
         this.updateVisual(oldMaterial, oldFacePair);
     }
 
-    private readonly updateVisual = (oldMaterisl: string | string[], oldFacePair: FaceMaterialPair[]) => {
+    private readonly updateVisual = (oldMaterial: string | string[], oldFacePair: FaceMaterialPair[]) => {
         if (!this._originFaceMesh) return;
         if (this.faceMaterialPair.length === 0) {
             this._mesh!.faces = this._originFaceMesh;
@@ -166,12 +166,12 @@ export abstract class GeometryNode extends VisualNode {
             }
         }
 
-        this.emitPropertyChanged("materialId", oldMaterisl);
+        this.emitPropertyChanged("materialId", oldMaterial);
         this.emitPropertyChanged("faceMaterialPair", oldFacePair);
-        const newMaterisl = Array.isArray(this.materialId) ? [...this.materialId] : this.materialId;
+        const newMaterial = Array.isArray(this.materialId) ? [...this.materialId] : this.materialId;
         Transaction.add(
             this.document,
-            new PropertyHistoryRecord(this, "materialId", oldMaterisl, newMaterisl),
+            new PropertyHistoryRecord(this, "materialId", oldMaterial, newMaterial),
         );
         Transaction.add(
             this.document,

@@ -30,7 +30,7 @@ import { LineGeometry } from "three/examples/jsm/lines/LineGeometry";
 import { LineMaterial } from "three/examples/jsm/lines/LineMaterial";
 import { LineSegments2 } from "three/examples/jsm/lines/LineSegments2";
 import { LineSegmentsGeometry } from "three/examples/jsm/lines/LineSegmentsGeometry";
-import { defaultEdgeMaterial, hilightEdgeMaterial } from "./common";
+import { defaultEdgeMaterial, highlightEdgeMaterial } from "./common";
 import { Constants } from "./constants";
 import type { IHighlightable } from "./highlightable";
 import { ThreeGeometryFactory } from "./threeGeometryFactory";
@@ -126,7 +126,7 @@ export class ThreeMeshObject extends ThreeVisualObject implements IHighlightable
         }
 
         if (this._mesh instanceof LineSegments2) {
-            this._mesh.material = hilightEdgeMaterial;
+            this._mesh.material = highlightEdgeMaterial;
         }
     }
 
@@ -163,7 +163,7 @@ export class ThreeMeshObject extends ThreeVisualObject implements IHighlightable
 
     private createMesh() {
         switch (this.meshNode.mesh.meshType) {
-            case "linesegments":
+            case "lineSegments":
                 return this.newLineSegments();
             case "surface":
                 return this.newMesh();
@@ -281,7 +281,7 @@ export class ThreeComponentObject extends ThreeVisualObject implements IHighligh
     private _boundbox?: LineSegments2;
     private _edges?: LineSegments2;
     private _faces?: Mesh;
-    private _linesegments?: LineSegments2;
+    private _lineSegments?: LineSegments2;
     private _surfaces?: Mesh;
 
     get edges() {
@@ -292,8 +292,8 @@ export class ThreeComponentObject extends ThreeVisualObject implements IHighligh
         return this._faces;
     }
 
-    get linesegments() {
-        return this._linesegments;
+    get lineSegments() {
+        return this._lineSegments;
     }
 
     get surfaces() {
@@ -307,7 +307,7 @@ export class ThreeComponentObject extends ThreeVisualObject implements IHighligh
         super(componentNode);
         this.initEdges();
         this.initFaces();
-        this.initLinesegments();
+        this.initLineSegments();
         this.initSurfaces();
     }
 
@@ -351,8 +351,8 @@ export class ThreeComponentObject extends ThreeVisualObject implements IHighligh
         this.add(this._surfaces);
     }
 
-    initLinesegments() {
-        const data = this.componentNode.component.mesh.linesegments;
+    initLineSegments() {
+        const data = this.componentNode.component.mesh.lineSegments;
         if (!data || data.position?.length === 0) {
             return;
         }
@@ -360,9 +360,9 @@ export class ThreeComponentObject extends ThreeVisualObject implements IHighligh
         const buff = new LineSegmentsGeometry();
         buff.setPositions(data.position!);
         buff.computeBoundingBox();
-        this._linesegments = new LineSegments2(buff, defaultEdgeMaterial);
-        this._linesegments.layers.set(Constants.Layers.Wireframe);
-        this.add(this._linesegments);
+        this._lineSegments = new LineSegments2(buff, defaultEdgeMaterial);
+        this._lineSegments.layers.set(Constants.Layers.Wireframe);
+        this.add(this._lineSegments);
     }
 
     override boundingBox(): BoundingBox | undefined {
@@ -378,7 +378,7 @@ export class ThreeComponentObject extends ThreeVisualObject implements IHighligh
 
             const geometry = new LineSegmentsGeometry();
             geometry.setPositions(BoundingBox.wireframe(box).position);
-            this._boundbox = new LineSegments2(geometry, hilightEdgeMaterial);
+            this._boundbox = new LineSegments2(geometry, highlightEdgeMaterial);
             this.add(this._boundbox);
         }
 
@@ -437,6 +437,6 @@ export class ThreeComponentObject extends ThreeVisualObject implements IHighligh
     }
 
     override wholeVisual(): (Mesh | LineSegments2)[] {
-        return [this.edges, this.faces, this.linesegments, this.surfaces].filter((x) => x !== undefined);
+        return [this.edges, this.faces, this.lineSegments, this.surfaces].filter((x) => x !== undefined);
     }
 }

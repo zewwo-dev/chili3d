@@ -6,22 +6,22 @@ import { Axis } from "./axis";
 import { TrackingBase } from "./trackingBase";
 
 export class AxisTracking extends TrackingBase {
-    private readonly axies: Map<IView, Axis[]> = new Map();
+    private readonly axes: Map<IView, Axis[]> = new Map();
 
     constructor(trackingZ: boolean) {
         super(trackingZ);
     }
 
     getAxes(view: IView, referencePoint: XYZ, angle: number | undefined = undefined) {
-        if (!this.axies.has(view)) {
-            this.axies.set(view, this.initAxes(view.workplane, referencePoint, angle));
+        if (!this.axes.has(view)) {
+            this.axes.set(view, this.initAxes(view.workplane, referencePoint, angle));
         }
-        return this.axies.get(view)!;
+        return this.axes.get(view)!;
     }
 
     private initAxes(plane: Plane, referencePoint: XYZ, angle: number | undefined): Axis[] {
         if (angle === undefined) {
-            return Axis.getAxiesAtPlane(referencePoint, plane, this.trackingZ);
+            return Axis.getAxesAtPlane(referencePoint, plane, this.trackingZ);
         }
 
         const result: Axis[] = [];
@@ -41,6 +41,6 @@ export class AxisTracking extends TrackingBase {
 
     override clear(): void {
         super.clear();
-        this.axies.clear();
+        this.axes.clear();
     }
 }

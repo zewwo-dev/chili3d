@@ -11,7 +11,7 @@ import { MultistepCommand } from "./multistepCommand";
 })
 export class Delete extends MultistepCommand {
     protected override executeMainTask(): void {
-        const nodes: INode[] | undefined = this.stepDatas[0].nodes;
+        const nodes: INode[] | undefined = this.stepData[0].nodes;
         if (!nodes || nodes.length === 0) {
             PubSub.default.pub("showToast", "toast.select.noSelected");
             return;

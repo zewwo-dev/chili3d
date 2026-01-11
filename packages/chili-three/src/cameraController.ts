@@ -62,7 +62,7 @@ export class CameraController extends Observable implements ICameraController {
             if (this.camera instanceof OrthographicCamera) {
                 this.updateOrthographicCamera(this.camera);
             }
-            this.updateCameraPosionTarget();
+            this.updateCameraPositionTarget();
         }
     }
 
@@ -134,10 +134,10 @@ export class CameraController extends Observable implements ICameraController {
         this._target.add(vector);
         this._position.add(vector);
 
-        this.updateCameraPosionTarget();
+        this.updateCameraPositionTarget();
     }
 
-    updateCameraPosionTarget() {
+    updateCameraPositionTarget() {
         this._camera.position.copy(this._position);
         this._camera.lookAt(this._target);
         this._camera.updateProjectionMatrix();
@@ -215,7 +215,7 @@ export class CameraController extends Observable implements ICameraController {
         }
 
         this._position.copy(currentPosition);
-        this.updateCameraPosionTarget();
+        this.updateCameraPositionTarget();
     }
 
     private getRotation(dx: number, dy: number) {
@@ -247,7 +247,7 @@ export class CameraController extends Observable implements ICameraController {
         }
 
         this.updateCameraNearFar();
-        this.updateCameraPosionTarget();
+        this.updateCameraPositionTarget();
     }
 
     private getBoundingSphere(context: ThreeVisualContext) {
@@ -292,7 +292,7 @@ export class CameraController extends Observable implements ICameraController {
             this.updateOrthographicCamera(this._camera);
         }
         this.updateCameraNearFar();
-        this.updateCameraPosionTarget();
+        this.updateCameraPositionTarget();
     }
 
     private caclueZoomFactor(x: number, y: number, direction: Vector3) {
@@ -330,7 +330,7 @@ export class CameraController extends Observable implements ICameraController {
         this._position.set(eye.x, eye.y, eye.z);
         this._target.set(target.x, target.y, target.z);
         this.camera.up.set(up.x, up.y, up.z);
-        this.updateCameraPosionTarget();
+        this.updateCameraPositionTarget();
     }
 
     private mouseToWorld(mx: number, my: number) {

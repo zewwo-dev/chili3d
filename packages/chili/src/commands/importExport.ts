@@ -23,8 +23,8 @@ import { importFiles } from "../utils";
 })
 export class Import implements ICommand {
     async execute(application: IApplication): Promise<void> {
-        const extenstions = application.dataExchange.importFormats().join(",");
-        const files = await readFilesAsync(extenstions, true);
+        const extensions = application.dataExchange.importFormats().join(",");
+        const files = await readFilesAsync(extensions, true);
         if (!files.isOk || files.value.length === 0) {
             alert(files.error);
             return;
@@ -79,7 +79,7 @@ export class Export extends CancelableCommand {
                 PubSub.default.pub("showToast", "toast.downloading");
                 download(data, `${nodes[0].name}${suffix}`);
             },
-            "toast.excuting{0}",
+            "toast.executing{0}",
             I18n.translate("command.file.export"),
         );
     }

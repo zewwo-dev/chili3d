@@ -65,7 +65,7 @@ export interface ICurve extends IGeometry {
     isClosed(): boolean;
     period(): number;
     isPeriodic(): boolean;
-    continutity(): Continuity;
+    getContinuity(): Continuity;
     makeEdge(): IEdge;
 }
 

@@ -2,7 +2,7 @@
 // See LICENSE file in the project root for full license information.
 
 import { command, type GeometryNode, type Plane, Precision, type XYZ } from "chili-core";
-import { CylinderNode } from "../../bodys";
+import { CylinderNode } from "../../bodies";
 import type { LengthAtAxisSnapData, SnapLengthAtPlaneData } from "../../snap";
 import { type IStep, LengthAtAxisStep, LengthAtPlaneStep, PointStep } from "../../step";
 import { CreateCommand } from "../createCommand";
@@ -20,7 +20,7 @@ export class Cylinder extends CreateCommand {
     }
 
     private readonly getRadiusData = (): SnapLengthAtPlaneData => {
-        const { point, view } = this.stepDatas[0];
+        const { point, view } = this.stepData[0];
         return {
             point: () => point!,
             preview: this.circlePreview,
@@ -34,12 +34,12 @@ export class Cylinder extends CreateCommand {
     };
 
     private readonly circlePreview = (point: XYZ | undefined) => {
-        if (!point) return [this.meshPoint(this.stepDatas[0].point!)];
+        if (!point) return [this.meshPoint(this.stepData[0].point!)];
 
-        const start = this.stepDatas[0].point!;
-        const plane = this.findPlane(this.stepDatas[0].view, start, point);
+        const start = this.stepData[0].point!;
+        const plane = this.findPlane(this.stepData[0].view, start, point);
         return [
-            this.meshPoint(this.stepDatas[0].point!),
+            this.meshPoint(this.stepData[0].point!),
             this.meshLine(start, point),
             this.meshCreatedShape("circle", plane.normal, start, plane.projectDistance(start, point)),
         ];
@@ -47,30 +47,30 @@ export class Cylinder extends CreateCommand {
 
     private readonly getHeightStepData = (): LengthAtAxisSnapData => {
         return {
-            point: this.stepDatas[0].point!,
-            direction: this.stepDatas[1].plane!.normal,
+            point: this.stepData[0].point!,
+            direction: this.stepData[1].plane!.normal,
             preview: this.previewCylinder,
             validator: (p: XYZ) => {
-                return Math.abs(this.getHeight(this.stepDatas[1].plane!, p)) > 0.001;
+                return Math.abs(this.getHeight(this.stepData[1].plane!, p)) > 0.001;
             },
         };
     };
 
     private readonly previewCylinder = (end: XYZ | undefined) => {
         if (!end) {
-            return this.circlePreview(this.stepDatas[1].point);
+            return this.circlePreview(this.stepData[1].point);
         }
 
-        const plane = this.stepDatas[1].plane!;
-        const radius = plane.projectDistance(this.stepDatas[0].point!, this.stepDatas[1].point!);
+        const plane = this.stepData[1].plane!;
+        const radius = plane.projectDistance(this.stepData[0].point!, this.stepData[1].point!);
         const height = this.getHeight(plane, end);
 
         return [
-            this.meshPoint(this.stepDatas[0].point!),
+            this.meshPoint(this.stepData[0].point!),
             this.meshCreatedShape(
                 "cylinder",
                 height < 0 ? plane.normal.reverse() : plane.normal,
-                this.stepDatas[0].point!,
+                this.stepData[0].point!,
                 radius,
                 Math.abs(height),
             ),
@@ -78,19 +78,19 @@ export class Cylinder extends CreateCommand {
     };
 
     protected override geometryNode(): GeometryNode {
-        const plane = this.stepDatas[1].plane!;
-        const radius = plane.projectDistance(this.stepDatas[0].point!, this.stepDatas[1].point!);
-        const dz = this.getHeight(plane, this.stepDatas[2].point!);
+        const plane = this.stepData[1].plane!;
+        const radius = plane.projectDistance(this.stepData[0].point!, this.stepData[1].point!);
+        const dz = this.getHeight(plane, this.stepData[2].point!);
         return new CylinderNode(
             this.document,
             dz < 0 ? plane.normal.reverse() : plane.normal,
-            this.stepDatas[0].point!,
+            this.stepData[0].point!,
             radius,
             Math.abs(dz),
         );
     }
 
     private getHeight(plane: Plane, point: XYZ): number {
-        return point.sub(this.stepDatas[0].point!).dot(plane.normal);
+        return point.sub(this.stepData[0].point!).dot(plane.normal);
     }
 }

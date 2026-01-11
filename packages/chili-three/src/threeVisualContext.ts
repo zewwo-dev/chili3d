@@ -191,8 +191,8 @@ export class ThreeVisualContext implements IVisualContext {
         return this.visualShapes.children.length;
     }
 
-    getVisual(nodel: INode): IVisualObject | undefined {
-        return this._NodeVisualMap.get(nodel);
+    getVisual(model: INode): IVisualObject | undefined {
+        return this._NodeVisualMap.get(model);
     }
 
     visuals(): IVisualObject[] {
@@ -245,9 +245,9 @@ export class ThreeVisualContext implements IVisualContext {
         }
     }
 
-    displayMesh(datas: ShapeMeshData[], opacity?: number): number {
+    displayMesh(data: ShapeMeshData[], opacity?: number): number {
         const group = new Group();
-        datas.forEach((data) => {
+        data.forEach((data) => {
             if (ShapeMeshData.isVertex(data)) {
                 group.add(ThreeGeometryFactory.createVertexGeometry(data));
             } else if (ShapeMeshData.isEdge(data)) {
@@ -260,13 +260,13 @@ export class ThreeVisualContext implements IVisualContext {
         return group.id;
     }
 
-    displayInstancedMesh(data: MeshLike, matrixs: Matrix4[], opacity?: number): number {
+    displayInstancedMesh(data: MeshLike, matrices: Matrix4[], opacity?: number): number {
         const geometry = ThreeGeometryFactory.createFaceBufferGeometry(data);
         const material = ThreeGeometryFactory.createMeshMaterial(opacity);
 
         ThreeGeometryFactory.setColor(geometry, data, material);
-        const instancedMesh = new InstancedMesh(geometry, material, matrixs.length);
-        matrixs.forEach((matrix, index) => {
+        const instancedMesh = new InstancedMesh(geometry, material, matrices.length);
+        matrices.forEach((matrix, index) => {
             instancedMesh.setMatrixAt(index, ThreeHelper.fromMatrix(matrix));
         });
 

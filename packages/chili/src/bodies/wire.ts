@@ -17,7 +17,7 @@ export class WireNode extends ParameterShapeNode {
         return "body.wire";
     }
 
-    @Serializer.serialze()
+    @Serializer.serialize()
     get edges(): IEdge[] {
         return this.getPrivateValue("edges");
     }

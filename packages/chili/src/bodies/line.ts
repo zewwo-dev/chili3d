@@ -18,7 +18,7 @@ export class LineNode extends ParameterShapeNode {
         return "body.line";
     }
 
-    @Serializer.serialze()
+    @Serializer.serialize()
     @Property.define("line.start")
     get start() {
         return this.getPrivateValue("start");
@@ -27,7 +27,7 @@ export class LineNode extends ParameterShapeNode {
         this.setPropertyEmitShapeChanged("start", pnt);
     }
 
-    @Serializer.serialze()
+    @Serializer.serialize()
     @Property.define("line.end")
     get end() {
         return this.getPrivateValue("end");

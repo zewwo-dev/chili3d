@@ -125,12 +125,12 @@ export class ThreeHelper {
             opacity: material.opacity,
             map: ThreeHelper.loadTexture(material.map),
             roughness: material.roughness,
-            metalness: material.metalness,
+            metalness: material.metallic,
             bumpMap: ThreeHelper.loadTexture(material.bumpMap),
             normalMap: ThreeHelper.loadTexture(material.normalMap),
             emissiveMap: ThreeHelper.loadTexture(material.emissiveMap),
             roughnessMap: ThreeHelper.loadTexture(material.roughnessMap),
-            metalnessMap: ThreeHelper.loadTexture(material.metalnessMap),
+            metalnessMap: ThreeHelper.loadTexture(material.metallicMap),
         });
     }
 

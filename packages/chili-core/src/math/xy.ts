@@ -13,9 +13,9 @@ export class XY {
     static readonly unitX = new XY(1, 0);
     static readonly unitY = new XY(0, 1);
 
-    @Serializer.serialze()
+    @Serializer.serialize()
     readonly x: number;
-    @Serializer.serialze()
+    @Serializer.serialize()
     readonly y: number;
 
     constructor(x: number, y: number) {

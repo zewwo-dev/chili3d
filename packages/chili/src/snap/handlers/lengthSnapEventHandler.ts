@@ -49,8 +49,8 @@ export class SnapLengthAtAxisHandler extends SnapEventHandler<LengthAtAxisSnapDa
 
     private shouldReverse() {
         return (
-            this._snaped?.point &&
-            this._snaped.point.sub(this.data.point).dot(this.data.direction) < -Precision.Distance
+            this._snapped?.point &&
+            this._snapped.point.sub(this.data.point).dot(this.data.direction) < -Precision.Distance
         );
     }
 
@@ -73,15 +73,15 @@ export class SnapLengthAtPlaneHandler extends SnapEventHandler<SnapLengthAtPlane
         super(document, controller, [objectSnap, trackingSnap, planeSnap], lengthData);
     }
 
-    protected override setSnaped(view: IView, event: PointerEvent): void {
-        super.setSnaped(view, event);
+    protected override setSnapped(view: IView, event: PointerEvent): void {
+        super.setSnapped(view, event);
         this.updateWorkplane();
     }
 
     private updateWorkplane() {
-        if (this._snaped) {
-            this.workplane = this.lengthData.plane(this._snaped.point);
-            this._snaped.plane = this.workplane;
+        if (this._snapped) {
+            this.workplane = this.lengthData.plane(this._snapped.point);
+            this._snapped.plane = this.workplane;
         }
     }
 
@@ -99,7 +99,7 @@ export class SnapLengthAtPlaneHandler extends SnapEventHandler<SnapLengthAtPlane
     }
 
     private calculatePointFromDistance(distance: number): XYZ {
-        const vector = this._snaped?.point!.sub(this.data.point()).normalize();
+        const vector = this._snapped?.point!.sub(this.data.point()).normalize();
         return this.data.point().add(vector!.multiply(distance));
     }
 

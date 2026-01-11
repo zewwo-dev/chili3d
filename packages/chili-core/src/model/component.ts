@@ -1,4 +1,4 @@
-// Part of the Chili3d Project, under the AGPL-3.0 Licensettt.
+// Part of the Chili3d Project, under the AGPL-3.0 License.
 // See LICENSE file in the project root for full license information.
 
 import type { IDocument } from "../document";
@@ -18,7 +18,7 @@ export type ComponentMesh = {
     faceMaterials: string[];
     edge: EdgeMeshData;
     face: FaceMeshData;
-    linesegments: Mesh;
+    lineSegments: Mesh;
     surfaceMaterials: string[];
     surface: Mesh;
 };
@@ -39,7 +39,7 @@ export function createComponentMesh(size: ComponentSize): ComponentMesh {
             range: [],
             groups: [],
         },
-        linesegments: Mesh.createLineSegments(size.lineSegment),
+        lineSegments: Mesh.createLineSegments(size.lineSegment),
         surfaceMaterials: [],
         surface: Mesh.createSurface(
             size.meshPosition,
@@ -71,22 +71,22 @@ export function createComponentSize(): ComponentSize {
 @Serializer.register(["name", "nodes", "origin", "id"])
 export class Component {
     private readonly _nodes: ReadonlyArray<VisualNode>;
-    @Serializer.serialze()
+    @Serializer.serialize()
     get nodes(): ReadonlyArray<VisualNode> {
         return this._nodes;
     }
 
     private readonly _name: string;
-    @Serializer.serialze()
+    @Serializer.serialize()
     get name(): string {
         return this._name;
     }
 
-    @Serializer.serialze()
+    @Serializer.serialize()
     readonly id: string;
 
     private _origin: XYZ;
-    @Serializer.serialze()
+    @Serializer.serialize()
     get origin(): XYZ {
         return this._origin;
     }
@@ -160,13 +160,13 @@ export class Component {
         offset: ComponentSize,
     ) => {
         for (const node of nodes) {
-            const totleTransform = node.transform.multiply(transform);
+            const totalTransform = node.transform.multiply(transform);
             if (node instanceof ShapeNode && node.shape.isOk) {
-                this.mergeShapeNode(visual, faceMaterialPair, node, totleTransform, offset);
+                this.mergeShapeNode(visual, faceMaterialPair, node, totalTransform, offset);
             } else if (node instanceof ComponentNode) {
-                this.mergeNodesMesh(visual, faceMaterialPair, node.component.nodes, totleTransform, offset);
+                this.mergeNodesMesh(visual, faceMaterialPair, node.component.nodes, totalTransform, offset);
             } else if (node instanceof MeshNode) {
-                this.mergeMeshNode(visual, node, totleTransform, offset);
+                this.mergeMeshNode(visual, node, totalTransform, offset);
             } else {
                 console.log(`****** to do merge MeshNode ******: ${Object.prototype.toString.call(node)}`);
             }
@@ -220,8 +220,8 @@ export class Component {
             if (node.mesh.index?.length) {
                 offset.meshIndex += node.mesh.index.length;
             }
-        } else if (node.mesh.meshType === "linesegments") {
-            visual.linesegments.position?.set(
+        } else if (node.mesh.meshType === "lineSegments") {
+            visual.lineSegments.position?.set(
                 transform.ofPoints(node.mesh.position!),
                 offset.lineSegment * 3,
             );
@@ -285,10 +285,10 @@ export class ComponentNode extends VisualNode {
         return this._component;
     }
 
-    @Serializer.serialze()
+    @Serializer.serialize()
     readonly componentId: string;
 
-    @Serializer.serialze()
+    @Serializer.serialize()
     readonly insert: XYZ;
 
     constructor(

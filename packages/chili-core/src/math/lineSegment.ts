@@ -7,10 +7,10 @@ import type { XYZ } from "./xyz";
 
 @Serializer.register(["start", "end"])
 export class LineSegment {
-    @Serializer.serialze()
+    @Serializer.serialize()
     readonly start: XYZ;
 
-    @Serializer.serialze()
+    @Serializer.serialize()
     readonly end: XYZ;
 
     constructor(start: XYZ, end: XYZ) {

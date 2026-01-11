@@ -19,7 +19,7 @@ export class SweepedNode extends ParameterShapeNode {
         return "body.sweep";
     }
 
-    @Serializer.serialze()
+    @Serializer.serialize()
     get profile() {
         return this.getPrivateValue("profile");
     }
@@ -27,7 +27,7 @@ export class SweepedNode extends ParameterShapeNode {
         this.setPropertyEmitShapeChanged("profile", value);
     }
 
-    @Serializer.serialze()
+    @Serializer.serialize()
     get path() {
         return this.getPrivateValue("path");
     }
@@ -35,7 +35,7 @@ export class SweepedNode extends ParameterShapeNode {
         this.setPropertyEmitShapeChanged("path", value);
     }
 
-    @Serializer.serialze()
+    @Serializer.serialize()
     get round() {
         return this.getPrivateValue("round");
     }

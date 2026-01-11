@@ -17,14 +17,14 @@ export type SerializedProperties<T> = {
     [P in keyof T]?: any;
 };
 
-export interface RefelectData {
+export interface ReflectData {
     ctor: new (...args: any[]) => any;
     ctorParamNames: string[];
     serialize?: (target: any) => SerializedProperties<any>;
     deserialize?: (...args: any[]) => any;
 }
 
-export function registerReflect(data: RefelectData, name?: string) {
+export function registerReflect(data: ReflectData, name?: string) {
     const actualName = name ?? data.ctor.name;
     if (reflectMap.has(actualName)) {
         console.warn(`Class ${actualName} already registered, skip.`);
@@ -36,7 +36,7 @@ export function registerReflect(data: RefelectData, name?: string) {
 
 export function registerTypeArray(
     TypeArray: new (array: number[]) => Float32Array | Uint32Array,
-): RefelectData {
+): ReflectData {
     return {
         ctor: TypeArray,
         ctorParamNames: ["buffer"],
@@ -52,12 +52,12 @@ export function registerTypeArray(
 }
 
 const propertiesMap = new Map<new (...args: any[]) => any, Set<string>>();
-const reflectMap = new Map<string, RefelectData>();
+const reflectMap = new Map<string, ReflectData>();
 reflectMap.set("Float32Array", registerTypeArray(Float32Array));
 reflectMap.set("Uint32Array", registerTypeArray(Uint32Array));
 
 export namespace Serializer {
-    export function serialze() {
+    export function serialize() {
         return (target: any, property: string) => {
             let keys = propertiesMap.get(target);
             if (keys === undefined) {
@@ -115,14 +115,14 @@ export namespace Serializer {
         }
 
         const { ctor, ctorParamNames, deserialize } = reflectMap.get(className)!;
-        const parameters = deserilizeParameters(document, ctorParamNames, properties, className);
+        const parameters = deserializeParameters(document, ctorParamNames, properties, className);
         if (deserialize) {
             return deserialize(...ctorParamNames.map((x) => parameters[x]));
         }
         return new ctor(...ctorParamNames.map((x) => parameters[x]));
     }
 
-    function deserilizeParameters(
+    function deserializeParameters(
         document: IDocument,
         ctorParamNames: any[],
         properties: SerializedProperties<any>,
@@ -132,7 +132,7 @@ export namespace Serializer {
         parameters["document"] = document;
         for (const key of ctorParamNames) {
             if (key in properties) {
-                parameters[key] = deserialValue(document, properties[key]);
+                parameters[key] = deserializeValue(document, properties[key]);
             } else if (key !== "document") {
                 parameters[key] = undefined;
                 console.warn(`${className} constructor parameter ${key} is missing`);
@@ -141,7 +141,7 @@ export namespace Serializer {
         return parameters;
     }
 
-    function deserialValue(document: IDocument, value: any) {
+    function deserializeValue(document: IDocument, value: any) {
         if (value === null || value === undefined) {
             return undefined;
         }
@@ -166,10 +166,10 @@ export namespace Serializer {
             if (instance instanceof Observable) {
                 instance.setPrivateValue(
                     key as keyof Observable,
-                    deserialValue(document, data.properties[key]),
+                    deserializeValue(document, data.properties[key]),
                 );
             } else {
-                instance[key] = deserialValue(document, data.properties[key]);
+                instance[key] = deserializeValue(document, data.properties[key]);
             }
         }
     }

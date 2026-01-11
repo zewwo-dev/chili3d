@@ -83,14 +83,14 @@ export class PropertyView extends HTMLElement {
         const matrix = new Expander("common.matrix");
         this.panel.append(matrix);
 
-        matrix.contenxtPanel.append(new MatrixProperty(document, geometries, style.properties));
+        matrix.contextPanel.append(new MatrixProperty(document, geometries, style.properties));
     }
 
     private addParameters(geometries: (VisualNode | GroupNode)[], document: IDocument) {
         const entities = geometries.filter((x) => x instanceof VisualNode);
         if (entities.length === 0 || !this.isAllElementsOfTypeFirstElement(entities)) return;
         const parameters = new Expander(entities[0].display());
-        parameters.contenxtPanel.append(
+        parameters.contextPanel.append(
             ...Property.getProperties(Object.getPrototypeOf(entities[0]), Node.prototype).map((x) =>
                 findPropertyControl(document, entities, x),
             ),

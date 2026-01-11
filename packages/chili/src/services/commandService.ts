@@ -33,12 +33,12 @@ export class CommandService implements IService {
     stop(): void {
         PubSub.default.remove("executeCommand", this.executeCommand);
         PubSub.default.remove("activeViewChanged", this.onActiveViewChanged);
-        Logger.info(`${CommandService.name} stoped`);
+        Logger.info(`${CommandService.name} stopped`);
     }
 
     register(app: IApplication) {
         this._app = app;
-        Logger.info(`${CommandService.name} registed`);
+        Logger.info(`${CommandService.name} registered`);
     }
 
     private readonly onActiveViewChanged = async (view: IView | undefined) => {
@@ -93,7 +93,7 @@ export class CommandService implements IService {
             return true;
         }
         if (Command.getData(this.app.executingCommand)?.key === commandName) {
-            PubSub.default.pub("showToast", "toast.command.{0}excuting", commandName);
+            PubSub.default.pub("showToast", "toast.command.{0}executing", commandName);
             return false;
         }
         if (ICommand.isCancelableCommand(this.app.executingCommand)) {

@@ -40,7 +40,7 @@ export abstract class Node extends HistoryObservable implements INode {
     previousSibling: INode | undefined;
     nextSibling: INode | undefined;
 
-    @Serializer.serialze()
+    @Serializer.serialize()
     readonly id: string;
 
     constructor(document: IDocument, name: string, id: string) {
@@ -49,7 +49,7 @@ export abstract class Node extends HistoryObservable implements INode {
         this.setPrivateValue("name", name || "untitled");
     }
 
-    @Serializer.serialze()
+    @Serializer.serialize()
     @Property.define("common.name")
     get name() {
         return this.getPrivateValue("name");
@@ -58,7 +58,7 @@ export abstract class Node extends HistoryObservable implements INode {
         this.setProperty("name", value);
     }
 
-    @Serializer.serialze()
+    @Serializer.serialize()
     get visible(): boolean {
         return this.getPrivateValue("visible", true);
     }

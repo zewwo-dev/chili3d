@@ -5,7 +5,7 @@ import { type AsyncController, type I18nKeys, type IDocument, Precision, type XY
 import { AngleSnapEventHandler, Dimension, type PointSnapData } from "../snap";
 import { SnapStep } from "./step";
 
-function defaultSnapedData(): PointSnapData {
+function defaultSnappedData(): PointSnapData {
     return {
         dimension: Dimension.D1D2D3,
     };
@@ -16,7 +16,7 @@ export class AngleStep extends SnapStep<PointSnapData> {
         tip: I18nKeys,
         private readonly handleCenter: () => XYZ,
         private readonly handleP1: () => XYZ,
-        handleP2Data: () => PointSnapData = defaultSnapedData,
+        handleP2Data: () => PointSnapData = defaultSnappedData,
         keepSelected = false,
     ) {
         super(tip, handleP2Data, keepSelected);

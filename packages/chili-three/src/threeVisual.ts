@@ -68,7 +68,7 @@ export class ThreeVisual implements IVisual {
         this.eventHandler = this.defaultEventHandler;
     }
 
-    isExcutingHandler(): boolean {
+    isExecutingHandler(): boolean {
         return this.eventHandler !== this.defaultEventHandler;
     }
 

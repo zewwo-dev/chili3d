@@ -11,8 +11,8 @@ import { MultistepCommand } from "../multistepCommand";
 })
 export class CopySubShapeCommand extends MultistepCommand {
     protected override executeMainTask() {
-        Transaction.execute(this.document, `excute ${Object.getPrototypeOf(this).data.name}`, () => {
-            this.stepDatas[0].shapes.forEach((x) => {
+        Transaction.execute(this.document, `execute ${Object.getPrototypeOf(this).data.name}`, () => {
+            this.stepData[0].shapes.forEach((x) => {
                 const subShape = x.shape.clone();
                 const model = new EditableShapeNode(
                     this.document,

@@ -2,7 +2,7 @@
 // See LICENSE file in the project root for full license information.
 
 import { command, type GeometryNode, Precision, XYZ } from "chili-core";
-import { SphereNode } from "../../bodys";
+import { SphereNode } from "../../bodies";
 import type { SnapLengthAtPlaneData } from "../../snap";
 import { type IStep, LengthAtPlaneStep, PointStep } from "../../step";
 import { CreateCommand } from "../createCommand";
@@ -19,30 +19,30 @@ export class Sphere extends CreateCommand {
     }
 
     private readonly getRadiusData = (): SnapLengthAtPlaneData => {
-        const point = this.stepDatas[0].point!;
+        const point = this.stepData[0].point!;
         return {
             point: () => point,
             preview: this.previewSphere,
-            plane: () => this.stepDatas[0].view.workplane.translateTo(point),
+            plane: () => this.stepData[0].view.workplane.translateTo(point),
             validator: (p: XYZ) => p.distanceTo(point) > Precision.Distance,
         };
     };
 
     private readonly previewSphere = (end: XYZ | undefined) => {
         if (!end) {
-            return [this.meshPoint(this.stepDatas[0].point!)];
+            return [this.meshPoint(this.stepData[0].point!)];
         }
 
-        const radius = this.stepDatas[0].point?.distanceTo(end)!;
+        const radius = this.stepData[0].point?.distanceTo(end)!;
         return [
-            this.meshPoint(this.stepDatas[0].point!),
-            this.meshCreatedShape("circle", XYZ.unitZ, this.stepDatas[0].point!, radius),
-            this.meshCreatedShape("circle", XYZ.unitY, this.stepDatas[0].point!, radius),
+            this.meshPoint(this.stepData[0].point!),
+            this.meshCreatedShape("circle", XYZ.unitZ, this.stepData[0].point!, radius),
+            this.meshCreatedShape("circle", XYZ.unitY, this.stepData[0].point!, radius),
         ];
     };
 
     protected override geometryNode(): GeometryNode {
-        const radius = this.stepDatas[0].point!.distanceTo(this.stepDatas[1].point!);
-        return new SphereNode(this.document, this.stepDatas[0].point!, radius);
+        const radius = this.stepData[0].point!.distanceTo(this.stepData[1].point!);
+        return new SphereNode(this.document, this.stepData[0].point!, radius);
     }
 }

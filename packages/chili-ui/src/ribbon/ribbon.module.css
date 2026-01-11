@@ -195,7 +195,7 @@
     }
 
     .tabHeader {
-        color: var(--titlebar-forground-color);
+        color: var(--titlebar-foreground-color);
         padding: 5px 15px;
 
         &:hover {
@@ -204,7 +204,7 @@
         }
     }
 
-    .activedTab {
+    .activeTab {
         position: relative;
 
         &::after {

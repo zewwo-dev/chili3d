@@ -11,18 +11,18 @@ export class Result<T, E = string> {
     readonly #value: T | undefined;
     readonly #error: E | undefined;
 
-    @Serializer.serialze()
+    @Serializer.serialize()
     get isOk(): boolean {
         return this.#isOk;
     }
 
-    @Serializer.serialze()
+    @Serializer.serialize()
     get value(): T {
         if (!this.#isOk) Logger.warn("Result is error");
         return this.#value!;
     }
 
-    @Serializer.serialze()
+    @Serializer.serialize()
     get error(): E {
         if (this.#isOk) Logger.warn("Result is ok");
         return this.#error!;

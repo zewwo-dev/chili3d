@@ -111,15 +111,15 @@ export class ThreeGeometry extends ThreeVisualObject implements IVisualGeometry 
         this.add(this._faces);
     }
 
-    setFacesMateiralTemperary(material: MeshLambertMaterial) {
+    setFacesMaterialTemporary(material: MeshLambertMaterial) {
         if (this._faces) this._faces.material = material;
     }
 
-    setEdgesMateiralTemperary(material: LineMaterial) {
+    setEdgesMaterialTemporary(material: LineMaterial) {
         if (this._edges) this._edges.material = material;
     }
 
-    removeTemperaryMaterial(): void {
+    removeTemporaryMaterial(): void {
         if (this._edges) this._edges.material = defaultEdgeMaterial;
         if (this._faces) this._faces.material = this._faceMaterial;
     }

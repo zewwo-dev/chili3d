@@ -18,11 +18,11 @@ export class XYZ {
     static readonly unitNZ = Object.freeze(new XYZ(0, 0, -1));
     static readonly one = Object.freeze(new XYZ(1, 1, 1));
 
-    @Serializer.serialze()
+    @Serializer.serialize()
     readonly x: number;
-    @Serializer.serialze()
+    @Serializer.serialize()
     readonly y: number;
-    @Serializer.serialze()
+    @Serializer.serialize()
     readonly z: number;
 
     constructor(x: number, y: number, z: number) {

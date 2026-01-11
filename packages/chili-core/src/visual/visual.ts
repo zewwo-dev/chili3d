@@ -19,6 +19,6 @@ export interface IVisual extends IDisposable {
     update(): void;
     eventHandler: IEventHandler;
     resetEventHandler(): void;
-    isExcutingHandler(): boolean;
+    isExecutingHandler(): boolean;
     createView(name: string, workplane: Plane): IView;
 }

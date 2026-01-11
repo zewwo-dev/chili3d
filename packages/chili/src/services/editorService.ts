@@ -17,7 +17,7 @@ export class EditorService implements IService {
     constructor(readonly factory: (document: IDocument, selected: INode[]) => IEventHandler) {}
 
     register(_app: IApplication): void {
-        Logger.info(`${EditorService.name} registed`);
+        Logger.info(`${EditorService.name} registered`);
     }
 
     start(): void {

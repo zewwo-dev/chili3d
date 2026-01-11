@@ -55,7 +55,7 @@ export class GroupCommand extends MultistepCommand {
     }
 
     protected override executeMainTask(): void {
-        const nodes = this.stepDatas[0].nodes?.filter((node) => node instanceof VisualNode);
+        const nodes = this.stepData[0].nodes?.filter((node) => node instanceof VisualNode);
         if (!nodes || nodes.length === 0) {
             PubSub.default.pub("showToast", "toast.select.noSelected");
             return;
@@ -76,7 +76,7 @@ export class GroupCommand extends MultistepCommand {
                 node.transform = worldTransform;
             }
 
-            const component = new Component(definition.name, this.stepDatas[0].nodes!, definition.insert);
+            const component = new Component(definition.name, this.stepData[0].nodes!, definition.insert);
             this.document.modelManager.components.push(component);
 
             if (definition.convertInstance) {
@@ -190,7 +190,7 @@ export class GroupCommand extends MultistepCommand {
 class PickInsertPointCommand implements ICommand {
     constructor(
         readonly document: IDocument,
-        readonly defination: GroupDefinition,
+        readonly definition: GroupDefinition,
     ) {}
 
     async execute(application: IApplication): Promise<void> {
@@ -199,7 +199,7 @@ class PickInsertPointCommand implements ICommand {
         const result = await pickPointStep.execute(this.document, controller);
 
         if (result?.point) {
-            this.defination.insert = result.point;
+            this.definition.insert = result.point;
         }
     }
 }

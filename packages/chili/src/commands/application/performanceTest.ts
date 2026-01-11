@@ -18,7 +18,7 @@ export abstract class PerformanceTestCommand implements ICommand {
     protected rowCols = 20;
 
     async execute(app: IApplication): Promise<void> {
-        const document = await app.newDocument("OCC Performace Test");
+        const document = await app.newDocument("OCC Performance Test");
 
         const start = performance.now();
         const distance = this.gap + this.size;

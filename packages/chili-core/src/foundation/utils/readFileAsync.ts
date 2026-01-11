@@ -45,10 +45,10 @@ export async function readFileAsync(
     method: "readAsText" | "readAsDataURL" = "readAsText",
 ): Promise<Result<FileData[]>> {
     const filesResult = await readFilesAsync(accept, multiple);
-    return filesResult.isOk ? readInputedFiles(filesResult.value, method) : filesResult.parse();
+    return filesResult.isOk ? readInputtedFiles(filesResult.value, method) : filesResult.parse();
 }
 
-async function readInputedFiles(
+async function readInputtedFiles(
     files: FileList,
     method: "readAsText" | "readAsDataURL",
 ): Promise<Result<FileData[]>> {

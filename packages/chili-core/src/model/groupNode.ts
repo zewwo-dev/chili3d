@@ -7,7 +7,7 @@ import { FolderNode } from "./folderNode";
 
 @Serializer.register(["document", "name", "id"])
 export class GroupNode extends FolderNode {
-    @Serializer.serialze()
+    @Serializer.serialize()
     get transform(): Matrix4 {
         return this.getPrivateValue("transform", Matrix4.identity());
     }

@@ -33,7 +33,7 @@ export class HotkeyService implements IService {
 
     register(app: IApplication): void {
         this.app = app;
-        Logger.info(`${HotkeyService.name} registed`);
+        Logger.info(`${HotkeyService.name} registered`);
     }
 
     start(): void {
@@ -45,7 +45,7 @@ export class HotkeyService implements IService {
     stop(): void {
         window.removeEventListener("keydown", this.eventHandlerKeyDown);
         window.removeEventListener("keydown", this.commandKeyDown);
-        Logger.info(`${HotkeyService.name} stoped`);
+        Logger.info(`${HotkeyService.name} stopped`);
     }
 
     protected canHandleKey(e: KeyboardEvent): boolean {

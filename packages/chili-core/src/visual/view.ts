@@ -40,7 +40,7 @@ export interface IView extends IPropertyChanged, IDisposable {
     rayAt(mx: number, my: number): Ray;
     screenToWorld(mx: number, my: number): XYZ;
     worldToScreen(point: XYZ): XY;
-    resize(width: number, heigth: number): void;
+    resize(width: number, height: number): void;
     setDom(element: HTMLElement): void;
     htmlText(text: string, point: XYZLike, options?: HtmlTextOptions): IDisposable;
     close(): void;

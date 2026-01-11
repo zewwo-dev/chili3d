@@ -40,9 +40,9 @@ export class AngleSnapEventHandler extends SnapEventHandler<PointSnapData> {
         snapPointData.prompt ??= this.formatAnglePrompt;
     }
 
-    private readonly formatAnglePrompt = (snaped?: SnapResult) => {
-        if (!snaped?.point) return "";
-        this.planeAngle.movePoint(snaped.point);
+    private readonly formatAnglePrompt = (snapped?: SnapResult) => {
+        if (!snapped?.point) return "";
+        this.planeAngle.movePoint(snapped.point);
         return `${this.planeAngle.angle.toFixed(2)} °`;
     };
 

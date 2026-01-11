@@ -25,7 +25,7 @@ import { MultistepCommand } from "../multistepCommand";
 export class OffsetCommand extends MultistepCommand {
     protected override executeMainTask() {
         const normal = this.getAxis().normal;
-        const shape = this.createOffsetShape(normal, this.stepDatas[1].distance!);
+        const shape = this.createOffsetShape(normal, this.stepData[1].distance!);
         const node = new EditableShapeNode(
             this.document,
             I18n.translate("command.create.offset"),
@@ -66,8 +66,8 @@ export class OffsetCommand extends MultistepCommand {
     }
 
     private getAxis(): { direction: XYZ; point: XYZ; normal: XYZ } {
-        const start = this.stepDatas[0].shapes[0].point!;
-        const shape = this.transformdFirstShape(this.stepDatas[0]);
+        const start = this.stepData[0].shapes[0].point!;
+        const shape = this.transformedFirstShape(this.stepData[0]);
         if (shape.shapeType === ShapeType.Edge) {
             return this.getEdgeAxis(shape as IEdge, start);
         }
@@ -117,7 +117,7 @@ export class OffsetCommand extends MultistepCommand {
     }
 
     private createOffsetShape(normal: XYZ, distance: number) {
-        const shape = this.transformdFirstShape(this.stepDatas[0]);
+        const shape = this.transformedFirstShape(this.stepData[0]);
         if (shape.shapeType === ShapeType.Edge) {
             return (shape as IEdge).offset(distance, normal);
         }

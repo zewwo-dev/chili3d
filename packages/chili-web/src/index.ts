@@ -8,7 +8,7 @@ import { Loading } from "./loading";
 const loading = new Loading();
 document.body.appendChild(loading);
 
-async function handleApplicaionBuilt(app: IApplication) {
+async function handleApplicationBuilt(app: IApplication) {
     document.body.removeChild(loading);
 
     const params = new URLSearchParams(window.location.search);
@@ -27,7 +27,7 @@ new AppBuilder()
     .useThree()
     .useUI()
     .build()
-    .then(handleApplicaionBuilt)
+    .then(handleApplicationBuilt)
     .catch((err) => {
         Logger.error(err);
     });

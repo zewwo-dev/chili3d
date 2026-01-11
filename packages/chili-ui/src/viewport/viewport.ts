@@ -21,7 +21,7 @@ class CameraConverter implements IConverter<CameraType> {
 
     convert(value: CameraType): Result<string, string> {
         if (value === this.type) {
-            return Result.ok(style.actived);
+            return Result.ok(style.active);
         }
         return Result.ok("");
     }

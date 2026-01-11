@@ -28,11 +28,11 @@ export abstract class SnapStep<D extends SnapData> implements IStep {
 
         const executorHandler = this.getEventHandler(document, controller, data);
         await document.selection.pickAsync(executorHandler, this.tip, controller, false, this.cursor);
-        const snaped = executorHandler.snaped;
+        const snapped = executorHandler.snapped;
 
         executorHandler.dispose();
 
-        return controller.result?.status === "success" ? snaped : undefined;
+        return controller.result?.status === "success" ? snapped : undefined;
     }
 
     private setValidator(data: D) {

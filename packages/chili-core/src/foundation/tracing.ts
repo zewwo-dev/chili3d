@@ -158,6 +158,7 @@ export class TraceUploader {
                     "Content-Type": "application/json",
                 },
                 body: JSON.stringify({
+                    // ID of root node. Primary key in backend database.
                     rootId: this.tracing.tree.entries().next().value?.[1].id,
                     commits: this.changes,
                 }),

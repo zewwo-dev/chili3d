@@ -61,10 +61,10 @@ export abstract class ShapeSelectionHandler extends SelectionHandler {
 
     protected override setHighlight(view: IView, event: PointerEvent) {
         const detecteds = this.getDetecteds(view, event);
-        this.highlightDetecteds(view, detecteds);
+        this.highlightDetected(view, detecteds);
     }
 
-    protected highlightDetecteds(view: IView, detecteds: VisualShapeData[]) {
+    protected highlightDetected(view: IView, detecteds: VisualShapeData[]) {
         this.cleanHighlights();
         detecteds.forEach((x) => {
             view.document.visual.highlighter.addState(
@@ -97,7 +97,7 @@ export abstract class ShapeSelectionHandler extends SelectionHandler {
                 : 1;
             this._lockDetected = this._detectAtMouse[index].shape;
             const detected = this.getDetecting();
-            if (detected) this.highlightDetecteds(view, [detected]);
+            if (detected) this.highlightDetected(view, [detected]);
         }
     }
 

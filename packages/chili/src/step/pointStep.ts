@@ -14,12 +14,12 @@ import {
 } from "../snap";
 import { SnapStep } from "./step";
 
-function defaultSnapedData(): PointSnapData {
+function defaultSnappedData(): PointSnapData {
     return { dimension: Dimension.D1 | Dimension.D1D2D3 };
 }
 
 export class PointStep extends SnapStep<PointSnapData> {
-    constructor(tip: I18nKeys, handleData: () => PointSnapData = defaultSnapedData, keepSelected = false) {
+    constructor(tip: I18nKeys, handleData: () => PointSnapData = defaultSnappedData, keepSelected = false) {
         super(tip, handleData, keepSelected);
     }
 

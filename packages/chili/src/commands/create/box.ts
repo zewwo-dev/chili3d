@@ -2,7 +2,7 @@
 // See LICENSE file in the project root for full license information.
 
 import { command, type GeometryNode, type Plane, Precision, type XYZ } from "chili-core";
-import { BoxNode } from "../../bodys";
+import { BoxNode } from "../../bodies";
 import type { LengthAtAxisSnapData } from "../../snap";
 import { type IStep, LengthAtAxisStep } from "../../step";
 import { RectCommandBase } from "./rect";
@@ -19,12 +19,12 @@ export class Box extends RectCommandBase {
     }
 
     private readonly getHeightStepData = (): LengthAtAxisSnapData => {
-        const plane = this.stepDatas[1].plane;
+        const plane = this.stepData[1].plane;
         if (plane === undefined) {
             throw new Error("plane is undefined, please report bug");
         }
         return {
-            point: this.stepDatas[1].point!,
+            point: this.stepData[1].point!,
             direction: plane.normal,
             preview: this.previewBox,
         };
@@ -32,25 +32,25 @@ export class Box extends RectCommandBase {
 
     private readonly previewBox = (end: XYZ | undefined) => {
         if (!end) {
-            return this.previewRect(this.stepDatas[1].point);
+            return this.previewRect(this.stepData[1].point);
         }
 
         const { plane, dx, dy } = this.rectDataFromTwoSteps();
         return [
-            this.meshPoint(this.stepDatas[0].point!),
-            this.meshPoint(this.stepDatas[1].point!),
+            this.meshPoint(this.stepData[0].point!),
+            this.meshPoint(this.stepData[1].point!),
             this.meshCreatedShape("box", plane, dx, dy, this.getHeight(plane, end)),
         ];
     };
 
     protected override geometryNode(): GeometryNode {
         const rect = this.rectDataFromTwoSteps();
-        const dz = this.getHeight(rect.plane, this.stepDatas[2].point!);
+        const dz = this.getHeight(rect.plane, this.stepData[2].point!);
         return new BoxNode(this.document, rect.plane, rect.dx, rect.dy, dz);
     }
 
     private getHeight(plane: Plane, point: XYZ): number {
-        const h = point.sub(this.stepDatas[1].point!).dot(plane.normal);
+        const h = point.sub(this.stepData[1].point!).dot(plane.normal);
         if (Math.abs(h) < Precision.Distance) {
             return h < 0 ? -0.00001 : 0.00001;
         }

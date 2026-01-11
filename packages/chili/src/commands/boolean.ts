@@ -11,15 +11,15 @@ import {
     Transaction,
     VisualState,
 } from "chili-core";
-import { BooleanNode } from "../bodys/boolean";
+import { BooleanNode } from "../bodies/boolean";
 import { type IStep, SelectShapeStep } from "../step";
 import { MultistepCommand } from "./multistepCommand";
 
 export abstract class BooleanOperate extends MultistepCommand {
     protected override executeMainTask() {
         Transaction.execute(this.document, "boolean", () => {
-            const shape1 = this.transformdFirstShape(this.stepDatas[0]);
-            const shape2 = this.transformdShapes(this.stepDatas[1]);
+            const shape1 = this.transformedFirstShape(this.stepData[0]);
+            const shape2 = this.transformedShapes(this.stepData[1]);
             const booleanType = this.getBooleanOperateType();
 
             const booleanShape = this.getBooleanShape(booleanType, shape1, shape2);
@@ -29,7 +29,7 @@ export abstract class BooleanOperate extends MultistepCommand {
             }
             const node = new BooleanNode(this.document, booleanShape.value);
             this.document.modelManager.rootNode.add(node);
-            this.stepDatas.forEach((x) => {
+            this.stepData.forEach((x) => {
                 x.nodes?.forEach((n) => n.parent?.remove(n));
             });
             this.document.visual.update();
@@ -65,7 +65,7 @@ export abstract class BooleanOperate extends MultistepCommand {
                             return false;
                         }
 
-                        return !this.stepDatas[0].nodes
+                        return !this.stepData[0].nodes
                             ?.map((x) => (x as ShapeNode).shape.value)
                             .includes(node.shape.value);
                     },

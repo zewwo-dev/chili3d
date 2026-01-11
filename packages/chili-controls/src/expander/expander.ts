@@ -9,7 +9,7 @@ export class Expander extends HTMLElement {
     private _isExpanded = true;
     private readonly expanderIcon: SVGSVGElement;
     private readonly headerPanel: HTMLDivElement;
-    readonly contenxtPanel = div({ className: style.contextPanel });
+    readonly contextPanel = div({ className: style.contextPanel });
 
     constructor(header: I18nKeys) {
         super();
@@ -24,19 +24,19 @@ export class Expander extends HTMLElement {
             className: style.headerText,
         });
         this.headerPanel.append(this.expanderIcon, text);
-        super.append(this.headerPanel, this.contenxtPanel);
+        super.append(this.headerPanel, this.contextPanel);
     }
 
     override appendChild<T extends Node>(node: T): T {
-        return this.contenxtPanel.appendChild(node);
+        return this.contextPanel.appendChild(node);
     }
 
     override append(...nodes: Node[]): void {
-        this.contenxtPanel.append(...nodes);
+        this.contextPanel.append(...nodes);
     }
 
     override removeChild<T extends Node>(child: T): T {
-        return this.contenxtPanel.removeChild(child);
+        return this.contextPanel.removeChild(child);
     }
 
     addItem(...nodes: Node[]) {
@@ -52,7 +52,7 @@ export class Expander extends HTMLElement {
         e.stopPropagation();
         this._isExpanded = !this._isExpanded;
         setSVGIcon(this.expanderIcon, this.getExpanderIcon());
-        this.contenxtPanel.classList.toggle(style.hidden, !this._isExpanded);
+        this.contextPanel.classList.toggle(style.hidden, !this._isExpanded);
     };
 }
 

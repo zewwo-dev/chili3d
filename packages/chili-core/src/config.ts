@@ -81,7 +81,7 @@ export class Config extends Observable {
         this.setProperty("dynamicWorkplane", value);
     }
 
-    @Serializer.serialze()
+    @Serializer.serialize()
     get language() {
         return this.getPrivateValue("language", I18n.defaultLanguage());
     }
@@ -89,7 +89,7 @@ export class Config extends Observable {
         this.setProperty("language", value);
     }
 
-    @Serializer.serialze()
+    @Serializer.serialize()
     get navigation3DIndex() {
         return this.getPrivateValue("navigation3DIndex", 0);
     }
@@ -97,7 +97,7 @@ export class Config extends Observable {
         this.setProperty("navigation3DIndex", value);
     }
 
-    @Serializer.serialze()
+    @Serializer.serialize()
     get themeMode() {
         return this.getPrivateValue("themeMode", "system");
     }

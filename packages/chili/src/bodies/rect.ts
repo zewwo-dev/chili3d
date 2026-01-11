@@ -19,7 +19,7 @@ export class RectNode extends FacebaseNode {
         return "body.rect";
     }
 
-    @Serializer.serialze()
+    @Serializer.serialize()
     @Property.define("rect.dx")
     get dx() {
         return this.getPrivateValue("dx");
@@ -28,7 +28,7 @@ export class RectNode extends FacebaseNode {
         this.setPropertyEmitShapeChanged("dx", dx);
     }
 
-    @Serializer.serialze()
+    @Serializer.serialize()
     @Property.define("rect.dy")
     get dy() {
         return this.getPrivateValue("dy");
@@ -37,7 +37,7 @@ export class RectNode extends FacebaseNode {
         this.setPropertyEmitShapeChanged("dy", dy);
     }
 
-    @Serializer.serialze()
+    @Serializer.serialize()
     get plane(): Plane {
         return this.getPrivateValue("plane");
     }

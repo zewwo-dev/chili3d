@@ -18,7 +18,7 @@ export class SphereNode extends ParameterShapeNode {
         return "body.sphere";
     }
 
-    @Serializer.serialze()
+    @Serializer.serialize()
     @Property.define("circle.center")
     get center() {
         return this.getPrivateValue("center");
@@ -27,7 +27,7 @@ export class SphereNode extends ParameterShapeNode {
         this.setPropertyEmitShapeChanged("center", center);
     }
 
-    @Serializer.serialze()
+    @Serializer.serialize()
     @Property.define("circle.radius")
     get radius() {
         return this.getPrivateValue("radius");

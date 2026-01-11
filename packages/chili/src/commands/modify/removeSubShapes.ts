@@ -11,9 +11,9 @@ import { MultistepCommand } from "../multistepCommand";
 })
 export class RemoveSubShapesCommand extends MultistepCommand {
     protected override executeMainTask() {
-        Transaction.execute(this.document, `excute ${Object.getPrototypeOf(this).data.name}`, () => {
-            const node = this.stepDatas[0].shapes[0].owner.node as ShapeNode;
-            const subShapes = this.stepDatas.at(-1)!.shapes.map((x) => x.shape);
+        Transaction.execute(this.document, `execute ${Object.getPrototypeOf(this).data.name}`, () => {
+            const node = this.stepData[0].shapes[0].owner.node as ShapeNode;
+            const subShapes = this.stepData.at(-1)!.shapes.map((x) => x.shape);
             const shape = this.document.application.shapeFactory.removeSubShape(node.shape.value, subShapes);
 
             const model = new EditableShapeNode(this.document, node.name, shape, node.materialId);

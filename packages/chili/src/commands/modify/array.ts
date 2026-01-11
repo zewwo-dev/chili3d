@@ -130,7 +130,7 @@ export class ArrayCommand extends MultistepCommand {
         return false;
     }
 
-    protected override async canExcute(): Promise<boolean> {
+    protected override async canExecute(): Promise<boolean> {
         if (this.positions) return true;
 
         if (!(await this.ensureSelectedModels())) return false;
@@ -212,7 +212,7 @@ export class ArrayCommand extends MultistepCommand {
         return transforms;
     }
 
-    private getArcMatrixs(center: XYZ, normal: XYZ, angle: number) {
+    private getArcMatrices(center: XYZ, normal: XYZ, angle: number) {
         const transforms = new Array<Matrix4>(this.count);
         for (let i = 0; i < this.count; i++) {
             transforms[i] = Matrix4.fromAxisRad(center, normal, i * angle);
@@ -229,8 +229,8 @@ export class ArrayCommand extends MultistepCommand {
                 new LengthAtPlaneStep("prompt.pickRadius", this.getRadiusData, true),
                 new AngleStep(
                     "prompt.pickNextPoint",
-                    () => this.stepDatas[0].point!,
-                    () => this.stepDatas[1].point!,
+                    () => this.stepData[0].point!,
+                    () => this.stepData[1].point!,
                     this.getAngleData,
                     true,
                 ),
@@ -246,33 +246,33 @@ export class ArrayCommand extends MultistepCommand {
     }
 
     private readonly getRadiusData = (): SnapLengthAtPlaneData => {
-        const { point, view } = this.stepDatas[0];
+        const { point, view } = this.stepData[0];
         return {
             point: () => point!,
             preview: this.circlePreview,
             plane: (p: XYZ | undefined) => this.findPlane(view, point!, p),
             validator: (p: XYZ) => {
                 if (p.distanceTo(point!) < Precision.Distance) return false;
-                return p.sub(point!).isParallelTo(this.stepDatas[0].view.workplane.normal) === false;
+                return p.sub(point!).isParallelTo(this.stepData[0].view.workplane.normal) === false;
             },
         };
     };
 
     private readonly circlePreview = (end: XYZ | undefined) => {
-        const visualCenter = this.meshPoint(this.stepDatas[0].point!);
+        const visualCenter = this.meshPoint(this.stepData[0].point!);
         if (!end) return [visualCenter];
-        const { point, view } = this.stepDatas[0];
+        const { point, view } = this.stepData[0];
         const plane = this.findPlane(view, point!, end);
         return [
             visualCenter,
-            this.meshLine(this.stepDatas[0].point!, end),
+            this.meshLine(this.stepData[0].point!, end),
             this.meshCreatedShape("circle", plane.normal, point!, plane.projectDistance(point!, end)),
         ];
     };
 
     private readonly getAngleData = () => {
-        const [center, p1] = [this.stepDatas[0].point!, this.stepDatas[1].point!];
-        const plane = this.stepDatas[1].plane ?? this.findPlane(this.stepDatas[1].view, center, p1);
+        const [center, p1] = [this.stepData[0].point!, this.stepData[1].point!];
+        const plane = this.stepData[1].plane ?? this.findPlane(this.stepData[1].view, center, p1);
         const points: ShapeMeshData[] = [this.meshPoint(center), this.meshPoint(p1)];
         this._planeAngle = new PlaneAngle(new Plane(center, plane.normal, p1.sub(center)));
 
@@ -294,7 +294,7 @@ export class ArrayCommand extends MultistepCommand {
         this._planeAngle!.movePoint(point);
         const result = [...points];
         if (Math.abs(this._planeAngle!.angle) > Precision.Angle) {
-            const transforms = this.getArcMatrixs(
+            const transforms = this.getArcMatrices(
                 center,
                 this._planeAngle!.plane.normal,
                 MathUtils.degToRad(this._planeAngle!.angle),
@@ -322,20 +322,20 @@ export class ArrayCommand extends MultistepCommand {
     private readonly vectorArrayStepData = () => {
         return {
             dimension: Dimension.D1,
-            refPoint: () => this.stepDatas[0].point!,
+            refPoint: () => this.stepData[0].point!,
             validator: (p: XYZ | undefined) =>
-                p !== undefined && p.distanceTo(this.stepDatas[0].point!) > Precision.Distance,
+                p !== undefined && p.distanceTo(this.stepData[0].point!) > Precision.Distance,
             preview: (p: XYZ | undefined) => {
                 if (!p) {
-                    return [this.meshPoint(this.stepDatas[0].point!)];
+                    return [this.meshPoint(this.stepData[0].point!)];
                 }
-                const vector = p.sub(this.stepDatas[0].point!);
+                const vector = p.sub(this.stepData[0].point!);
                 const matrixs = this.getBoxTransforms(vector, XYZ.zero, XYZ.zero);
                 this.updatePosition(matrixs);
 
                 return [
-                    this.meshPoint(this.stepDatas[0].point!),
-                    this.meshLine(this.stepDatas[0].point!, p),
+                    this.meshPoint(this.stepData[0].point!),
+                    this.meshLine(this.stepData[0].point!, p),
                     this.meshPoint(p),
                 ];
             },
@@ -352,39 +352,39 @@ export class ArrayCommand extends MultistepCommand {
             },
             preview: (p: XYZ | undefined) => {
                 if (!p) {
-                    return [this.meshPoint(this.stepDatas[0].point!)];
+                    return [this.meshPoint(this.stepData[0].point!)];
                 }
 
-                const matrixs = this.boxArrayMatrixs(index, xvec, yvec, normal, p);
+                const matrixs = this.boxArrayMatrices(index, xvec, yvec, normal, p);
                 this.updatePosition(matrixs);
                 return [
-                    this.meshLine(this.stepDatas[1].point!, p),
+                    this.meshLine(this.stepData[1].point!, p),
                     this.meshPoint(p),
-                    this.meshPoint(this.stepDatas[1].point!),
+                    this.meshPoint(this.stepData[1].point!),
                 ];
             },
         };
     };
 
-    private boxArrayMatrixs(index: 2 | 3, xvec: XYZ, yvec: XYZ, normal: XYZ, end: XYZ) {
-        const x = xvec.multiply(this.stepDatas[1].point!.sub(this.stepDatas[0].point!).dot(xvec));
+    private boxArrayMatrices(index: 2 | 3, xvec: XYZ, yvec: XYZ, normal: XYZ, end: XYZ) {
+        const x = xvec.multiply(this.stepData[1].point!.sub(this.stepData[0].point!).dot(xvec));
         let y: XYZ, z: XYZ;
         if (index === 2) {
-            y = yvec.multiply(end.sub(this.stepDatas[0].point!).dot(yvec));
+            y = yvec.multiply(end.sub(this.stepData[0].point!).dot(yvec));
             z = XYZ.zero;
         } else {
-            y = yvec.multiply(this.stepDatas[2].point!.sub(this.stepDatas[0].point!).dot(yvec));
-            z = normal.multiply(end.sub(this.stepDatas[0].point!).dot(normal));
+            y = yvec.multiply(this.stepData[2].point!.sub(this.stepData[0].point!).dot(yvec));
+            z = normal.multiply(end.sub(this.stepData[0].point!).dot(normal));
         }
         return this.getBoxTransforms(x, y, z);
     }
 
     private boxPlaneInfo(index: number) {
         const plane =
-            this.stepDatas[1].plane ??
-            this.findPlane(this.stepDatas[1].view, this.stepDatas[0].point!, this.stepDatas[1].point);
+            this.stepData[1].plane ??
+            this.findPlane(this.stepData[1].view, this.stepData[0].point!, this.stepData[1].point);
 
-        const xvec = this.stepDatas[1].point!.sub(this.stepDatas[0].point!).normalize()!;
+        const xvec = this.stepData[1].point!.sub(this.stepData[0].point!).normalize()!;
         let normal = plane.normal;
         if (normal.isEqualTo(xvec)) {
             normal = XYZ.unitZ;
@@ -394,9 +394,7 @@ export class ArrayCommand extends MultistepCommand {
         const yvec = normal.cross(xvec).normalize()!;
 
         const ray =
-            index === 2
-                ? new Line(this.stepDatas[1].point!, yvec)
-                : new Line(this.stepDatas[1].point!, normal);
+            index === 2 ? new Line(this.stepData[1].point!, yvec) : new Line(this.stepData[1].point!, normal);
         return { ray, yvec, normal, xvec };
     }
 
@@ -423,19 +421,19 @@ export class ArrayCommand extends MultistepCommand {
     }
 
     private cloneNodes() {
-        let matrixs: Matrix4[];
+        let matrices: Matrix4[];
         if (this.circularPattern) {
-            matrixs = this.getArcMatrixs(
-                this.stepDatas[0].point!,
+            matrices = this.getArcMatrices(
+                this.stepData[0].point!,
                 this._planeAngle!.plane.normal,
                 MathUtils.degToRad(this._planeAngle!.angle),
             );
         } else {
             const { xvec, yvec, normal } = this.boxPlaneInfo(3);
-            matrixs = this.boxArrayMatrixs(3, xvec, yvec, normal, this.stepDatas[3].point!);
+            matrices = this.boxArrayMatrices(3, xvec, yvec, normal, this.stepData[3].point!);
         }
         const nodes: VisualNode[] = [];
-        for (const matrix of matrixs) {
+        for (const matrix of matrices) {
             this.models?.forEach((model) => {
                 const cloned = model.clone();
                 cloned.transform = cloned.transform.multiply(matrix);

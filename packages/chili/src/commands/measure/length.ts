@@ -19,10 +19,10 @@ export class LengthMeasure extends MultistepCommand {
 
     private readonly getSecondPointData = (): PointSnapData => {
         return {
-            refPoint: () => this.stepDatas[0].point!,
+            refPoint: () => this.stepData[0].point!,
             dimension: Dimension.D1D2D3,
             validator: (point: XYZ) => {
-                return this.stepDatas[0].point!.distanceTo(point) > Precision.Distance;
+                return this.stepData[0].point!.distanceTo(point) > Precision.Distance;
             },
             preview: this.linePreview,
         };
@@ -30,14 +30,14 @@ export class LengthMeasure extends MultistepCommand {
 
     private readonly linePreview = (point: XYZ | undefined) => {
         if (!point) {
-            return [this.meshPoint(this.stepDatas[0].point!)];
+            return [this.meshPoint(this.stepData[0].point!)];
         }
-        return [this.meshPoint(this.stepDatas[0].point!), this.meshLine(this.stepDatas[0].point!, point)];
+        return [this.meshPoint(this.stepData[0].point!), this.meshLine(this.stepData[0].point!, point)];
     };
 
     protected override executeMainTask(): void {
-        const firstPoint = this.stepDatas[0].point!;
-        const secondPoint = this.stepDatas[1].point!;
+        const firstPoint = this.stepData[0].point!;
+        const secondPoint = this.stepData[1].point!;
         const distance = firstPoint.distanceTo(secondPoint);
         const visualId = this.document.visual.context.displayMesh([
             this.meshPoint(firstPoint),

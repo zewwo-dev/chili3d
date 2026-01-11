@@ -2,7 +2,7 @@
 // See LICENSE file in the project root for full license information.
 
 import { command, type GeometryNode, Precision, type XYZ } from "chili-core";
-import { CircleNode } from "../../bodys";
+import { CircleNode } from "../../bodies";
 import type { SnapLengthAtPlaneData } from "../../snap";
 import { type IStep, LengthAtPlaneStep, PointStep } from "../../step";
 import { CreateFaceableCommand } from "../createCommand";
@@ -19,7 +19,7 @@ export class Circle extends CreateFaceableCommand {
     }
 
     private readonly getRadiusData = (): SnapLengthAtPlaneData => {
-        const { point, view } = this.stepDatas[0];
+        const { point, view } = this.stepData[0];
         return {
             point: () => point!,
             preview: this.circlePreview,
@@ -33,20 +33,20 @@ export class Circle extends CreateFaceableCommand {
     };
 
     protected override geometryNode(): GeometryNode {
-        const [p1, p2] = [this.stepDatas[0].point!, this.stepDatas[1].point!];
-        const plane = this.stepDatas[1].plane ?? this.findPlane(this.stepDatas[1].view, p1, p2);
+        const [p1, p2] = [this.stepData[0].point!, this.stepData[1].point!];
+        const plane = this.stepData[1].plane ?? this.findPlane(this.stepData[1].view, p1, p2);
         const body = new CircleNode(this.document, plane.normal, p1, plane.projectDistance(p1, p2));
         body.isFace = this.isFace;
         return body;
     }
 
     private readonly circlePreview = (end: XYZ | undefined) => {
-        if (!end) return [this.meshPoint(this.stepDatas[0].point!)];
+        if (!end) return [this.meshPoint(this.stepData[0].point!)];
 
-        const { point, view } = this.stepDatas[0];
+        const { point, view } = this.stepData[0];
         const plane = this.findPlane(view, point!, end);
         return [
-            this.meshPoint(this.stepDatas[0].point!),
+            this.meshPoint(this.stepData[0].point!),
             this.meshLine(point!, end),
             this.meshCreatedShape("circle", plane.normal, point!, plane.projectDistance(point!, end)),
         ];

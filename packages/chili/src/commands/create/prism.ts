@@ -3,7 +3,7 @@
 
 import { command, type GeometryNode, type IShape, Precision, ShapeType } from "chili-core";
 import { GeoUtils } from "chili-geo";
-import { PrismNode } from "../../bodys";
+import { PrismNode } from "../../bodies";
 import type { LengthAtAxisSnapData } from "../../snap";
 import { type IStep, LengthAtAxisStep } from "../../step";
 import { SelectShapeStep } from "../../step/selectStep";
@@ -15,9 +15,9 @@ import { CreateCommand } from "../createCommand";
 })
 export class Prism extends CreateCommand {
     protected override geometryNode(): GeometryNode {
-        const shape = this.transformdFirstShape(this.stepDatas[0], false);
+        const shape = this.transformedFirstShape(this.stepData[0], false);
         const { point, normal } = this.getAxis(shape);
-        const dist = this.stepDatas[1].point!.sub(point).dot(normal);
+        const dist = this.stepData[1].point!.sub(point).dot(normal);
         return new PrismNode(this.document, shape, dist);
     }
 
@@ -29,7 +29,7 @@ export class Prism extends CreateCommand {
     }
 
     private readonly getLengthStepData = (): LengthAtAxisSnapData => {
-        const shape = this.transformdFirstShape(this.stepDatas[0]);
+        const shape = this.transformedFirstShape(this.stepData[0]);
         const { point, normal } = this.getAxis(shape);
         return {
             point,
@@ -45,7 +45,7 @@ export class Prism extends CreateCommand {
     };
 
     private getAxis(shape: IShape) {
-        const point = this.stepDatas[0].shapes[0].point!;
+        const point = this.stepData[0].shapes[0].point!;
         const normal = GeoUtils.normal(shape as any);
         return { point, normal };
     }

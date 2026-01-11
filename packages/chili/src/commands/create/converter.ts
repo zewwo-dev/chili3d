@@ -21,8 +21,8 @@ import {
     ShapeType,
     Transaction,
 } from "chili-core";
-import { FaceNode } from "../../bodys/face";
-import { WireNode } from "../../bodys/wire";
+import { FaceNode } from "../../bodies/face";
+import { WireNode } from "../../bodies/wire";
 import { SelectNodeStep } from "../../step";
 
 abstract class ConvertCommand extends CancelableCommand {
@@ -32,7 +32,7 @@ abstract class ConvertCommand extends CancelableCommand {
             PubSub.default.pub("showToast", "toast.select.noSelected");
             return;
         }
-        Transaction.execute(this.document, `excute ${Object.getPrototypeOf(this).data.name}`, () => {
+        Transaction.execute(this.document, `execute ${Object.getPrototypeOf(this).data.name}`, () => {
             const node = this.create(this.document, models);
             if (!node.isOk) {
                 PubSub.default.pub("showToast", "toast.converter.error");

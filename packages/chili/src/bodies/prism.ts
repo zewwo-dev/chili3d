@@ -18,7 +18,7 @@ export class PrismNode extends ParameterShapeNode {
         return "body.prism";
     }
 
-    @Serializer.serialze()
+    @Serializer.serialize()
     get section(): IShape {
         return this.getPrivateValue("section");
     }
@@ -26,7 +26,7 @@ export class PrismNode extends ParameterShapeNode {
         this.setPropertyEmitShapeChanged("section", value);
     }
 
-    @Serializer.serialze()
+    @Serializer.serialize()
     @Property.define("common.length")
     get length(): number {
         return this.getPrivateValue("length");

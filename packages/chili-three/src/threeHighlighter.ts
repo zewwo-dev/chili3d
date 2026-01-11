@@ -8,7 +8,7 @@ import { LineSegmentsGeometry } from "three/examples/jsm/lines/LineSegmentsGeome
 import {
     faceColoredMaterial,
     faceTransparentMaterial,
-    hilightEdgeMaterial,
+    highlightEdgeMaterial,
     selectedEdgeMaterial,
 } from "./common";
 import { IHighlightable } from "./highlightable";
@@ -55,17 +55,17 @@ export class GeometryState {
         const [_oldState, newState] = this.updateStates(key, method, state);
         if (this.visual instanceof ThreeGeometry) {
             if (newState === VisualState.normal) {
-                this.visual.removeTemperaryMaterial();
+                this.visual.removeTemporaryMaterial();
             } else if (VisualState.hasState(newState, VisualState.edgeHighlight)) {
-                this.visual.setEdgesMateiralTemperary(hilightEdgeMaterial);
+                this.visual.setEdgesMaterialTemporary(highlightEdgeMaterial);
             } else if (VisualState.hasState(newState, VisualState.edgeSelected)) {
-                this.visual.setEdgesMateiralTemperary(selectedEdgeMaterial);
+                this.visual.setEdgesMaterialTemporary(selectedEdgeMaterial);
             } else if (VisualState.hasState(newState, VisualState.faceTransparent)) {
-                this.visual.removeTemperaryMaterial();
-                this.visual.setFacesMateiralTemperary(faceTransparentMaterial);
+                this.visual.removeTemporaryMaterial();
+                this.visual.setFacesMaterialTemporary(faceTransparentMaterial);
             } else if (VisualState.hasState(newState, VisualState.faceColored)) {
-                this.visual.removeTemperaryMaterial();
-                this.visual.setFacesMateiralTemperary(faceColoredMaterial);
+                this.visual.removeTemporaryMaterial();
+                this.visual.setFacesMaterialTemporary(faceColoredMaterial);
             }
         } else if (IHighlightable.is(this.visual)) {
             if (newState !== VisualState.normal) {
@@ -101,7 +101,7 @@ export class GeometryState {
         });
         this.highlighter.container.clear();
         if (this.visual instanceof ThreeGeometry) {
-            this.visual.removeTemperaryMaterial();
+            this.visual.removeTemporaryMaterial();
         } else if (this.visual instanceof ThreeMeshObject) {
             this.visual.unhighlight();
         }
@@ -139,7 +139,7 @@ export class GeometryState {
         const geometry = this.getOrCloneGeometry(type, key, i);
         if (geometry && "material" in geometry) {
             const material = VisualState.hasState(newState, VisualState.edgeHighlight)
-                ? hilightEdgeMaterial
+                ? highlightEdgeMaterial
                 : selectedEdgeMaterial;
             geometry.material = material;
             this._states.set(key, [newState, geometry]);
@@ -224,9 +224,9 @@ export class ThreeHighlighter implements IHighlighter {
         return geometryState;
     }
 
-    highlightMesh(...datas: ShapeMeshData[]): number {
+    highlightMesh(...data: ShapeMeshData[]): number {
         const group = new Group();
-        datas.forEach((data) => {
+        data.forEach((data) => {
             if (ShapeMeshData.isVertex(data)) {
                 group.add(ThreeGeometryFactory.createVertexGeometry(data));
             } else if (ShapeMeshData.isEdge(data)) {

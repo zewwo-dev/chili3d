@@ -112,21 +112,21 @@ export class PickTrimEdgeEventHandler extends ShapeSelectionHandler {
         super(document, ShapeType.Shape, false, controller, new EdgeFilter());
     }
 
-    protected override highlightDetecteds(view: IView, detecteds: VisualShapeData[]): void {
+    protected override highlightDetected(view: IView, detected: VisualShapeData[]): void {
         this.cleanHighlights();
-        if (detecteds.length !== 1 || detecteds[0].shape.shapeType !== ShapeType.Edge) return;
+        if (detected.length !== 1 || detected[0].shape.shapeType !== ShapeType.Edge) return;
 
-        const box = BoundingBox.transformed(detecteds[0].owner.boundingBox()!, detecteds[0].transform);
-        const edges = this.filterByBoundingBox(box, view, detecteds[0].shape);
-        const edge = detecteds[0].shape.transformedMul(detecteds[0].transform) as IEdge;
+        const box = BoundingBox.transformed(detected[0].owner.boundingBox()!, detected[0].transform);
+        const edges = this.filterByBoundingBox(box, view, detected[0].shape);
+        const edge = detected[0].shape.transformedMul(detected[0].transform) as IEdge;
         this.releaseStack.add(edge);
 
-        const segments = findSegments(edge.curve, edge, edges, detecteds);
+        const segments = findSegments(edge.curve, edge, edges, detected);
         const mesh = edge.trim(segments.deleteSegment.start, segments.deleteSegment.end).mesh.edges!;
         mesh.color = VisualConfig.highlightEdgeColor;
         mesh.lineWidth = 3;
         this.highlightedEdge = view.document.visual.highlighter.highlightMesh(mesh);
-        this.highlight = { edge: detecteds[0], segments, curve: edge.curve };
+        this.highlight = { edge: detected[0], segments, curve: edge.curve };
         view.update();
     }
 

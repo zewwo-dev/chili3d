@@ -18,7 +18,7 @@ export class PolygonNode extends FacebaseNode {
         return "body.polygon";
     }
 
-    @Serializer.serialze()
+    @Serializer.serialize()
     @Property.define("polygon.points")
     get points() {
         return this.getPrivateValue("points");

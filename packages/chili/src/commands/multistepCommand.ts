@@ -20,18 +20,18 @@ import type { SnapResult } from "../snap";
 import type { IStep } from "../step";
 
 export abstract class MultistepCommand extends CancelableCommand {
-    protected stepDatas: SnapResult[] = [];
+    protected stepData: SnapResult[] = [];
 
-    protected canExcute(): Promise<boolean> {
+    protected canExecute(): Promise<boolean> {
         return Promise.resolve(true);
     }
 
     protected override onRestarting(): void {
-        this.resetStepDatas();
+        this.resetStepData();
     }
 
     protected async executeAsync(): Promise<void> {
-        if (!(await this.canExcute()) || !(await this.executeSteps())) {
+        if (!(await this.canExecute()) || !(await this.executeSteps())) {
             return;
         }
 
@@ -42,13 +42,13 @@ export abstract class MultistepCommand extends CancelableCommand {
         const steps = this.getSteps();
 
         return Promise.try(async () => {
-            while (this.stepDatas.length < steps.length) {
+            while (this.stepData.length < steps.length) {
                 this.controller = new AsyncController();
-                const data = await steps[this.stepDatas.length].execute(this.document, this.controller);
+                const data = await steps[this.stepData.length].execute(this.document, this.controller);
                 if (data === undefined || this.controller.result?.status !== "success") {
                     return false;
                 }
-                this.stepDatas.push(data);
+                this.stepData.push(data);
             }
             return true;
         }).finally(() => {
@@ -59,8 +59,8 @@ export abstract class MultistepCommand extends CancelableCommand {
         });
     }
 
-    protected resetStepDatas() {
-        this.stepDatas.length = 0;
+    protected resetStepData() {
+        this.stepData.length = 0;
     }
 
     protected meshPoint(point: XYZ) {
@@ -105,13 +105,13 @@ export abstract class MultistepCommand extends CancelableCommand {
         return ViewUtils.raycastClosestPlane(view, origin, point);
     };
 
-    protected transformdFirstShape(step: SnapResult, shouldDispose = true) {
+    protected transformedFirstShape(step: SnapResult, shouldDispose = true) {
         const shape = step.shapes[0].shape.transformedMul(step.shapes[0].transform);
         if (shouldDispose) this.disposeStack.add(shape);
         return shape;
     }
 
-    protected transformdShapes(step: SnapResult, shouldDispose = true) {
+    protected transformedShapes(step: SnapResult, shouldDispose = true) {
         return step.shapes.map((s) => {
             const shape = s.shape.transformedMul(s.transform);
             if (shouldDispose) this.disposeStack.add(shape);

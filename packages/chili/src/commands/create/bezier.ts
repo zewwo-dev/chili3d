@@ -24,7 +24,7 @@ import { CreateCommand } from "../createCommand";
 })
 export class BezierCommand extends CreateCommand {
     protected override geometryNode(): GeometryNode {
-        const bezier = this.application.shapeFactory.bezier(this.stepDatas.map((x) => x.point!));
+        const bezier = this.application.shapeFactory.bezier(this.stepData.map((x) => x.point!));
         return new EditableShapeNode(this.document, I18n.translate("command.create.bezier"), bezier.value);
     }
 
@@ -39,7 +39,7 @@ export class BezierCommand extends CreateCommand {
             if (data === undefined) {
                 return this.controller.result?.status === "success";
             }
-            this.stepDatas.push(data);
+            this.stepData.push(data);
             if (this.isClose(data)) {
                 return true;
             }
@@ -47,10 +47,9 @@ export class BezierCommand extends CreateCommand {
     }
 
     private isClose(data: SnapResult) {
-        console.log(this.stepDatas[0].point!.distanceTo(data.point!));
+        console.log(this.stepData[0].point!.distanceTo(data.point!));
         return (
-            this.stepDatas.length > 1 &&
-            this.stepDatas[0].point!.distanceTo(data.point!) <= Precision.Distance
+            this.stepData.length > 1 && this.stepData[0].point!.distanceTo(data.point!) <= Precision.Distance
         );
     }
 
@@ -62,23 +61,23 @@ export class BezierCommand extends CreateCommand {
 
     private readonly getNextData = (): PointSnapData => {
         return {
-            refPoint: () => this.stepDatas.at(-1)!.point!,
+            refPoint: () => this.stepData.at(-1)!.point!,
             dimension: Dimension.D1D2D3,
             validator: this.validator,
             preview: this.preview,
             featurePoints: [
                 {
-                    point: this.stepDatas.at(0)!.point!,
+                    point: this.stepData.at(0)!.point!,
                     prompt: I18n.translate("prompt.polygon.close"),
-                    when: () => this.stepDatas.length > 2,
+                    when: () => this.stepData.length > 2,
                 },
             ],
         };
     };
 
     private readonly preview = (point: XYZ | undefined): ShapeMeshData[] => {
-        const ps: ShapeMeshData[] = this.stepDatas.map((data) => this.meshPoint(data.point!));
-        const points = this.stepDatas.map((data) => data.point) as XYZ[];
+        const ps: ShapeMeshData[] = this.stepData.map((data) => this.meshPoint(data.point!));
+        const points = this.stepData.map((data) => data.point) as XYZ[];
         if (point) {
             points.push(point);
         }
@@ -106,7 +105,7 @@ export class BezierCommand extends CreateCommand {
     }
 
     private readonly validator = (point: XYZ): boolean => {
-        for (const data of this.stepDatas) {
+        for (const data of this.stepData) {
             if (point.distanceTo(data.point!) < 0.001) {
                 return false;
             }

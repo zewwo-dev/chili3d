@@ -2,23 +2,23 @@
 // See LICENSE file in the project root for full license information.
 
 import {
+    FacebaseNode,
     type I18nKeys,
     type IDocument,
     type IShape,
-    ParameterShapeNode,
     Property,
     type Result,
     Serializer,
     type XYZ,
 } from "chili-core";
 
-@Serializer.register(["document", "normal", "center", "radius", "dz"])
-export class CylinderNode extends ParameterShapeNode {
+@Serializer.register(["document", "normal", "center", "radius"])
+export class CircleNode extends FacebaseNode {
     override display(): I18nKeys {
-        return "body.cylinder";
+        return "body.circle";
     }
 
-    @Serializer.serialze()
+    @Serializer.serialize()
     @Property.define("circle.center")
     get center() {
         return this.getPrivateValue("center");
@@ -27,43 +27,31 @@ export class CylinderNode extends ParameterShapeNode {
         this.setPropertyEmitShapeChanged("center", center);
     }
 
-    @Serializer.serialze()
+    @Serializer.serialize()
     @Property.define("circle.radius")
     get radius() {
         return this.getPrivateValue("radius");
     }
-    set radius(dy: number) {
-        this.setPropertyEmitShapeChanged("radius", dy);
+    set radius(radius: number) {
+        this.setPropertyEmitShapeChanged("radius", radius);
     }
 
-    @Serializer.serialze()
-    @Property.define("box.dz")
-    get dz() {
-        return this.getPrivateValue("dz");
-    }
-    set dz(dz: number) {
-        this.setPropertyEmitShapeChanged("dz", dz);
-    }
-
-    @Serializer.serialze()
+    @Serializer.serialize()
     get normal(): XYZ {
         return this.getPrivateValue("normal");
     }
 
-    constructor(document: IDocument, normal: XYZ, center: XYZ, radius: number, dz: number) {
+    constructor(document: IDocument, normal: XYZ, center: XYZ, radius: number) {
         super(document);
         this.setPrivateValue("normal", normal);
         this.setPrivateValue("center", center);
         this.setPrivateValue("radius", radius);
-        this.setPrivateValue("dz", dz);
     }
 
-    generateShape(): Result<IShape> {
-        return this.document.application.shapeFactory.cylinder(
-            this.normal,
-            this.center,
-            this.radius,
-            this.dz,
-        );
+    generateShape(): Result<IShape, string> {
+        const circle = this.document.application.shapeFactory.circle(this.normal, this.center, this.radius);
+        if (!circle.isOk || !this.isFace) return circle;
+        const wire = this.document.application.shapeFactory.wire([circle.value]);
+        return wire.isOk ? wire.value.toFace() : circle;
     }
 }

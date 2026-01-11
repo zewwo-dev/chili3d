@@ -12,7 +12,7 @@ export interface ObjectTrackingAxis {
     objectName: string | undefined;
 }
 
-interface SnapeInfo {
+interface SnapInfo {
     snap: SnapResult;
     shapeId: number;
 }
@@ -20,7 +20,7 @@ interface SnapeInfo {
 export class ObjectTracking extends TrackingBase {
     private timer?: number;
     private snapping?: SnapResult;
-    private readonly trackings: Map<IDocument, SnapeInfo[]> = new Map();
+    private readonly trackings: Map<IDocument, SnapInfo[]> = new Map();
 
     constructor(trackingZ: boolean) {
         super(trackingZ);
@@ -36,7 +36,7 @@ export class ObjectTracking extends TrackingBase {
         const result: ObjectTrackingAxis[] = [];
         this.trackings.get(view.document)?.map((x) => {
             const plane = ViewUtils.ensurePlane(view, view.workplane);
-            const axes = Axis.getAxiesAtPlane(x.snap.point!, plane, this.trackingZ);
+            const axes = Axis.getAxesAtPlane(x.snap.point!, plane, this.trackingZ);
             result.push({ axes, objectName: x.snap.info });
         });
         return result;
@@ -70,7 +70,7 @@ export class ObjectTracking extends TrackingBase {
         document.visual.update();
     }
 
-    private removeTrackingPoint(document: IDocument, s: SnapeInfo, snaps: SnapeInfo[]) {
+    private removeTrackingPoint(document: IDocument, s: SnapInfo, snaps: SnapInfo[]) {
         document.visual.context.removeMesh(s.shapeId);
         this.trackings.set(
             document,
@@ -78,7 +78,7 @@ export class ObjectTracking extends TrackingBase {
         );
     }
 
-    private addTrackingPoint(snap: SnapResult, document: IDocument, snaps: SnapeInfo[]) {
+    private addTrackingPoint(snap: SnapResult, document: IDocument, snaps: SnapInfo[]) {
         const pointId = this.displayPoint(
             document,
             snap,

@@ -23,7 +23,7 @@
     margin-left: 16px;
 
     &:hover {
-        --delete-visiblity: visible;
+        --delete-visibility: visible;
     }
 
     img {
@@ -41,6 +41,6 @@
         right: 2px;
         width: 16px;
         height: 16px;
-        visibility: var(--delete-visiblity);
+        visibility: var(--delete-visibility);
     }
 }

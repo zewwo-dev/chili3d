@@ -18,7 +18,7 @@ export class ToolBar extends HTMLElement {
     private render() {
         const buttons = [
             { icon: "icon-folder-plus", tip: "items.tool.newFolder", command: this.newGroup },
-            { icon: "icon-unexpand", tip: "items.tool.unexpandAll", command: this.unExpandAll },
+            { icon: "icon-unexpand", tip: "items.tool.collapseAll", command: this.unExpandAll },
             { icon: "icon-expand", tip: "items.tool.expandAll", command: this.expandAll },
         ];
         buttons.forEach(({ icon, tip, command }) => this.button(icon, tip as I18nKeys, command));

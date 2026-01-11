@@ -2,7 +2,7 @@
 // See LICENSE file in the project root for full license information.
 
 import { command, type GeometryNode, Precision, Property, type XYZ } from "chili-core";
-import { LineNode } from "../../bodys";
+import { LineNode } from "../../bodies";
 import { Dimension, type PointSnapData } from "../../snap";
 import { type IStep, PointStep } from "../../step";
 import { CreateCommand } from "../createCommand";
@@ -23,7 +23,7 @@ export class Line extends CreateCommand {
     }
 
     protected override geometryNode(): GeometryNode {
-        return new LineNode(this.document, this.stepDatas[0].point!, this.stepDatas[1].point!);
+        return new LineNode(this.document, this.stepData[0].point!, this.stepData[1].point!);
     }
 
     getSteps(): IStep[] {
@@ -32,21 +32,21 @@ export class Line extends CreateCommand {
         return [firstStep, secondStep];
     }
 
-    protected override resetStepDatas() {
+    protected override resetStepData() {
         if (this.isContinue) {
-            this.stepDatas[0] = this.stepDatas[1];
-            this.stepDatas.length = 1;
+            this.stepData[0] = this.stepData[1];
+            this.stepData.length = 1;
         } else {
-            this.stepDatas.length = 0;
+            this.stepData.length = 0;
         }
     }
 
     private readonly getSecondPointData = (): PointSnapData => {
         return {
-            refPoint: () => this.stepDatas[0].point!,
+            refPoint: () => this.stepData[0].point!,
             dimension: Dimension.D1D2D3,
             validator: (point: XYZ) => {
-                return this.stepDatas[0].point!.distanceTo(point) > Precision.Distance;
+                return this.stepData[0].point!.distanceTo(point) > Precision.Distance;
             },
             preview: this.linePreview,
         };
@@ -54,8 +54,8 @@ export class Line extends CreateCommand {
 
     private readonly linePreview = (point: XYZ | undefined) => {
         if (!point) {
-            return [this.meshPoint(this.stepDatas[0].point!)];
+            return [this.meshPoint(this.stepData[0].point!)];
         }
-        return [this.meshPoint(this.stepDatas[0].point!), this.meshLine(this.stepDatas[0].point!, point)];
+        return [this.meshPoint(this.stepData[0].point!), this.meshLine(this.stepData[0].point!, point)];
     };
 }

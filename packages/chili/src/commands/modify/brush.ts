@@ -22,14 +22,14 @@ export class AddBrushCommand extends MultistepCommand {
         return [new SelectShapeStep(ShapeType.Face, "prompt.select.faces", { multiple: true })];
     }
     protected override executeMainTask(): void {
-        const nodeMatiralMape = new Map<GeometryNode, { faceIndex: number; materialId: string }[]>();
+        const nodeMaterialMap = new Map<GeometryNode, { faceIndex: number; materialId: string }[]>();
 
-        this.stepDatas[0].shapes.forEach((x) => {
+        this.stepData[0].shapes.forEach((x) => {
             if (x.owner.node instanceof GeometryNode) {
-                if (!nodeMatiralMape.has(x.owner.node)) {
-                    nodeMatiralMape.set(x.owner.node, []);
+                if (!nodeMaterialMap.has(x.owner.node)) {
+                    nodeMaterialMap.set(x.owner.node, []);
                 }
-                nodeMatiralMape.get(x.owner.node)!.push({
+                nodeMaterialMap.get(x.owner.node)!.push({
                     faceIndex: (x.shape as ISubFaceShape).index,
                     materialId: this.materialId,
                 });
@@ -37,7 +37,7 @@ export class AddBrushCommand extends MultistepCommand {
         });
 
         Transaction.execute(this.document, "add face material", () => {
-            nodeMatiralMape.forEach((value, key) => {
+            nodeMaterialMap.forEach((value, key) => {
                 key.addFaceMaterial(value);
             });
         });
@@ -56,19 +56,19 @@ export class RemoveBrushCommand extends MultistepCommand {
     }
 
     protected override executeMainTask(): void {
-        const nodeMatiralMape = new Map<GeometryNode, number[]>();
+        const nodeMaterialMap = new Map<GeometryNode, number[]>();
 
-        this.stepDatas[0].shapes.forEach((x) => {
+        this.stepData[0].shapes.forEach((x) => {
             if (x.owner.node instanceof GeometryNode) {
-                if (!nodeMatiralMape.has(x.owner.node)) {
-                    nodeMatiralMape.set(x.owner.node, []);
+                if (!nodeMaterialMap.has(x.owner.node)) {
+                    nodeMaterialMap.set(x.owner.node, []);
                 }
-                nodeMatiralMape.get(x.owner.node)!.push((x.shape as ISubFaceShape).index);
+                nodeMaterialMap.get(x.owner.node)!.push((x.shape as ISubFaceShape).index);
             }
         });
 
         Transaction.execute(this.document, "remove face material", () => {
-            nodeMatiralMape.forEach((value, key) => {
+            nodeMaterialMap.forEach((value, key) => {
                 key.removeFaceMaterial(value);
             });
         });
@@ -88,7 +88,7 @@ export class ClearBrushCommand extends MultistepCommand {
 
     protected override executeMainTask(): void {
         Transaction.execute(this.document, "clear face material", () => {
-            this.stepDatas[0].nodes?.forEach((x) => {
+            this.stepData[0].nodes?.forEach((x) => {
                 if (x instanceof GeometryNode) {
                     x.clearFaceMaterial();
                 }

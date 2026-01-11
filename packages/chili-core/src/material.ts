@@ -9,7 +9,7 @@ import { Serializer } from "./serialize";
 
 @Serializer.register(["document"])
 export class Texture extends HistoryObservable {
-    @Serializer.serialze()
+    @Serializer.serialize()
     @Property.define("material.texture.image")
     get image(): string {
         return this.getPrivateValue("image", "");
@@ -18,7 +18,7 @@ export class Texture extends HistoryObservable {
         this.setProperty("image", value);
     }
 
-    @Serializer.serialze()
+    @Serializer.serialize()
     get wrapS(): number {
         return this.getPrivateValue("wrapS", 1000);
     }
@@ -26,7 +26,7 @@ export class Texture extends HistoryObservable {
         this.setProperty("wrapS", value);
     }
 
-    @Serializer.serialze()
+    @Serializer.serialize()
     get wrapT(): number {
         return this.getPrivateValue("wrapT", 1000);
     }
@@ -34,7 +34,7 @@ export class Texture extends HistoryObservable {
         this.setProperty("wrapT", value);
     }
 
-    @Serializer.serialze()
+    @Serializer.serialize()
     @Property.define("material.texture.rotation")
     get rotation(): number {
         return this.getPrivateValue("rotation", 0);
@@ -43,7 +43,7 @@ export class Texture extends HistoryObservable {
         this.setProperty("rotation", value);
     }
 
-    @Serializer.serialze()
+    @Serializer.serialize()
     @Property.define("material.texture.offset")
     get offset(): XY {
         return this.getPrivateValue("offset", new XY(0, 0));
@@ -52,7 +52,7 @@ export class Texture extends HistoryObservable {
         this.setProperty("offset", value);
     }
 
-    @Serializer.serialze()
+    @Serializer.serialize()
     @Property.define("material.texture.repeat")
     get repeat(): XY {
         return this.getPrivateValue("repeat", new XY(1, 1));
@@ -61,22 +61,22 @@ export class Texture extends HistoryObservable {
         this.setProperty("repeat", value);
     }
 
-    @Serializer.serialze()
+    @Serializer.serialize()
     center: XY = new XY(0.5, 0.5);
 }
 
 @Serializer.register(["document", "name", "color", "id"])
 export class Material extends HistoryObservable {
-    @Serializer.serialze()
+    @Serializer.serialize()
     vertexColors = false;
 
-    @Serializer.serialze()
+    @Serializer.serialize()
     transparent = true;
 
-    @Serializer.serialze()
+    @Serializer.serialize()
     readonly id: string;
 
-    @Serializer.serialze()
+    @Serializer.serialize()
     @Property.define("common.name")
     get name(): string {
         return this.getPrivateValue("name");
@@ -85,7 +85,7 @@ export class Material extends HistoryObservable {
         this.setProperty("name", value);
     }
 
-    @Serializer.serialze()
+    @Serializer.serialize()
     @Property.define("common.color", { type: "color" })
     get color(): number | string {
         return this.getPrivateValue("color");
@@ -94,7 +94,7 @@ export class Material extends HistoryObservable {
         this.setProperty("color", value);
     }
 
-    @Serializer.serialze()
+    @Serializer.serialize()
     @Property.define("common.opacity")
     get opacity(): number {
         return this.getPrivateValue("opacity", 1);
@@ -103,7 +103,7 @@ export class Material extends HistoryObservable {
         this.setProperty("opacity", value);
     }
 
-    @Serializer.serialze()
+    @Serializer.serialize()
     @Property.define("material.map")
     get map(): Texture {
         return this.getPrivateValue("map", new Texture(this.document));
@@ -129,7 +129,7 @@ export class Material extends HistoryObservable {
 
 @Serializer.register(["document", "name", "color", "id"])
 export class PhongMaterial extends Material {
-    @Serializer.serialze()
+    @Serializer.serialize()
     @Property.define("material.specular", { type: "color" })
     get specular(): number | string {
         return this.getPrivateValue("specular", 0x111111);
@@ -138,7 +138,7 @@ export class PhongMaterial extends Material {
         this.setProperty("specular", value);
     }
 
-    @Serializer.serialze()
+    @Serializer.serialize()
     @Property.define("material.shininess")
     get shininess(): number {
         return this.getPrivateValue("shininess", 30);
@@ -147,7 +147,7 @@ export class PhongMaterial extends Material {
         this.setProperty("shininess", value);
     }
 
-    @Serializer.serialze()
+    @Serializer.serialize()
     @Property.define("material.emissive", { type: "color" })
     get emissive(): number | string {
         return this.getPrivateValue("emissive", 0x000000);
@@ -156,7 +156,7 @@ export class PhongMaterial extends Material {
         this.setProperty("emissive", value);
     }
 
-    @Serializer.serialze()
+    @Serializer.serialize()
     @Property.define("material.specularMap")
     get specularMap(): Texture {
         return this.getPrivateValue("specularMap", new Texture(this.document));
@@ -165,7 +165,7 @@ export class PhongMaterial extends Material {
         this.setProperty("specularMap", value);
     }
 
-    @Serializer.serialze()
+    @Serializer.serialize()
     @Property.define("material.bumpMap")
     get bumpMap(): Texture {
         return this.getPrivateValue("bumpMap", new Texture(this.document));
@@ -174,7 +174,7 @@ export class PhongMaterial extends Material {
         this.setProperty("bumpMap", value);
     }
 
-    @Serializer.serialze()
+    @Serializer.serialize()
     @Property.define("material.normalMap")
     get normalMap(): Texture {
         return this.getPrivateValue("normalMap", new Texture(this.document));
@@ -183,7 +183,7 @@ export class PhongMaterial extends Material {
         this.setProperty("normalMap", value);
     }
 
-    @Serializer.serialze()
+    @Serializer.serialize()
     @Property.define("material.emissiveMap")
     get emissiveMap(): Texture {
         return this.getPrivateValue("emissiveMap", new Texture(this.document));
@@ -195,25 +195,25 @@ export class PhongMaterial extends Material {
 
 @Serializer.register(["document", "name", "color", "id"])
 export class PhysicalMaterial extends Material {
-    @Serializer.serialze()
-    @Property.define("material.metalness")
-    get metalness(): number {
-        return this.getPrivateValue("metalness", 0);
+    @Serializer.serialize()
+    @Property.define("material.metallic")
+    get metallic(): number {
+        return this.getPrivateValue("metallic", 0);
     }
-    set metalness(value: number) {
-        this.setProperty("metalness", value);
-    }
-
-    @Serializer.serialze()
-    @Property.define("material.metalnessMap")
-    get metalnessMap(): Texture {
-        return this.getPrivateValue("metalnessMap", new Texture(this.document));
-    }
-    set metalnessMap(value: Texture) {
-        this.setProperty("metalnessMap", value);
+    set metallic(value: number) {
+        this.setProperty("metallic", value);
     }
 
-    @Serializer.serialze()
+    @Serializer.serialize()
+    @Property.define("material.metallicMap")
+    get metallicMap(): Texture {
+        return this.getPrivateValue("metallicMap", new Texture(this.document));
+    }
+    set metallicMap(value: Texture) {
+        this.setProperty("metallicMap", value);
+    }
+
+    @Serializer.serialize()
     @Property.define("material.roughness")
     get roughness(): number {
         return this.getPrivateValue("roughness", 1);
@@ -222,7 +222,7 @@ export class PhysicalMaterial extends Material {
         this.setProperty("roughness", value);
     }
 
-    @Serializer.serialze()
+    @Serializer.serialize()
     @Property.define("material.roughnessMap")
     get roughnessMap(): Texture {
         return this.getPrivateValue("roughnessMap", new Texture(this.document));
@@ -231,7 +231,7 @@ export class PhysicalMaterial extends Material {
         this.setProperty("roughnessMap", value);
     }
 
-    @Serializer.serialze()
+    @Serializer.serialize()
     @Property.define("material.emissive", { type: "color" })
     get emissive(): number | string {
         return this.getPrivateValue("emissive", 0x000000);
@@ -240,7 +240,7 @@ export class PhysicalMaterial extends Material {
         this.setProperty("emissive", value);
     }
 
-    @Serializer.serialze()
+    @Serializer.serialize()
     @Property.define("material.bumpMap")
     get bumpMap(): Texture {
         return this.getPrivateValue("bumpMap", new Texture(this.document));
@@ -249,7 +249,7 @@ export class PhysicalMaterial extends Material {
         this.setProperty("bumpMap", value);
     }
 
-    @Serializer.serialze()
+    @Serializer.serialize()
     @Property.define("material.normalMap")
     get normalMap(): Texture {
         return this.getPrivateValue("normalMap", new Texture(this.document));
@@ -258,7 +258,7 @@ export class PhysicalMaterial extends Material {
         this.setProperty("normalMap", value);
     }
 
-    @Serializer.serialze()
+    @Serializer.serialize()
     @Property.define("material.emissiveMap")
     get emissiveMap(): Texture {
         return this.getPrivateValue("emissiveMap", new Texture(this.document));

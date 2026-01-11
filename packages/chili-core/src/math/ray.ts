@@ -7,12 +7,12 @@ import { XYZ } from "./xyz";
 
 @Serializer.register(["point", "direction"])
 export class Ray {
-    @Serializer.serialze()
+    @Serializer.serialize()
     readonly point: XYZ;
     /**
      * unit vector
      */
-    @Serializer.serialze()
+    @Serializer.serialize()
     readonly direction: XYZ;
 
     constructor(point: XYZ, direction: XYZ) {

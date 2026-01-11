@@ -196,7 +196,7 @@ export class ThreeView extends Observable implements IView {
 
         this.resize(element.clientWidth, element.clientHeight);
         this._resizeObserver.observe(element);
-        this.cameraController.updateCameraPosionTarget();
+        this.cameraController.updateCameraPositionTarget();
     }
 
     htmlText(text: string, point: XYZLike, options?: HtmlTextOptions): IDisposable {

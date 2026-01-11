@@ -144,7 +144,7 @@
         }
     }
 
-    .actived {
+    .active {
         background: var(--checked-color);
     }
 

@@ -8,7 +8,7 @@ import type { IView } from "./view";
 
 @Serializer.register(["name", "cameraPosition", "cameraTarget", "cameraUp"])
 export class Act extends Observable {
-    @Serializer.serialze()
+    @Serializer.serialize()
     public get name() {
         return this.getPrivateValue("name");
     }
@@ -16,7 +16,7 @@ export class Act extends Observable {
         this.setProperty("name", value);
     }
 
-    @Serializer.serialze()
+    @Serializer.serialize()
     public get cameraPosition() {
         return this.getPrivateValue("cameraPosition");
     }
@@ -24,7 +24,7 @@ export class Act extends Observable {
         this.setProperty("cameraPosition", value);
     }
 
-    @Serializer.serialze()
+    @Serializer.serialize()
     public get cameraTarget() {
         return this.getPrivateValue("cameraTarget");
     }
@@ -32,7 +32,7 @@ export class Act extends Observable {
         this.setProperty("cameraTarget", value);
     }
 
-    @Serializer.serialze()
+    @Serializer.serialize()
     public get cameraUp() {
         return this.getPrivateValue("cameraUp");
     }

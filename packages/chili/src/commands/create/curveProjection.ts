@@ -39,8 +39,8 @@ export class CurveProjectionCommand extends CreateCommand {
     }
 
     protected override geometryNode() {
-        const shape = this.transformdFirstShape(this.stepDatas[0]) as IEdge | IWire;
-        const face = this.transformdFirstShape(this.stepDatas[1]) as IFace;
+        const shape = this.transformedFirstShape(this.stepData[0]) as IEdge | IWire;
+        const face = this.transformedFirstShape(this.stepData[1]) as IFace;
         const [x, y, z] = this.dir.split(",").map(Number);
         const dir = new XYZ(x, y, z).normalize() as XYZ;
 

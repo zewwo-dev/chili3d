@@ -133,7 +133,7 @@ export class Application implements IApplication {
                     this.activeView?.cameraController.fitContent();
                 }
             },
-            "toast.excuting{0}",
+            "toast.executing{0}",
             I18n.translate("command.doc.open"),
         );
     }

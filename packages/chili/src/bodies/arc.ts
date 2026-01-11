@@ -18,7 +18,7 @@ export class ArcNode extends ParameterShapeNode {
         return "body.arc";
     }
 
-    @Serializer.serialze()
+    @Serializer.serialize()
     @Property.define("circle.center")
     get center() {
         return this.getPrivateValue("center");
@@ -27,18 +27,18 @@ export class ArcNode extends ParameterShapeNode {
         this.setPropertyEmitShapeChanged("center", center);
     }
 
-    @Serializer.serialze()
+    @Serializer.serialize()
     @Property.define("arc.start")
     get start(): XYZ {
         return this.getPrivateValue("start");
     }
 
-    @Serializer.serialze()
+    @Serializer.serialize()
     get normal(): XYZ {
         return this.getPrivateValue("normal");
     }
 
-    @Serializer.serialze()
+    @Serializer.serialize()
     @Property.define("arc.angle")
     get angle() {
         return this.getPrivateValue("angle");

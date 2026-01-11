@@ -31,10 +31,10 @@ export abstract class TransformedCommand extends MultistepCommand {
         this.setProperty("isClone", value);
     }
 
-    protected abstract transfrom(p2: XYZ): Matrix4;
+    protected abstract transform(p2: XYZ): Matrix4;
 
     protected transformPreview = (point: XYZ): EdgeMeshData => {
-        const transform = this.transfrom(point);
+        const transform = this.transform(point);
         const positions = transform.ofPoints(this.positions!);
         return {
             position: new Float32Array(positions),
@@ -58,7 +58,7 @@ export abstract class TransformedCommand extends MultistepCommand {
         return false;
     }
 
-    protected override async canExcute(): Promise<boolean> {
+    protected override async canExecute(): Promise<boolean> {
         if (!(await this.ensureSelectedModels())) return false;
 
         this.positions = this.models!.flatMap((model) => {
@@ -79,8 +79,8 @@ export abstract class TransformedCommand extends MultistepCommand {
     }
 
     protected executeMainTask(): void {
-        Transaction.execute(this.document, `excute ${Object.getPrototypeOf(this).data.name}`, () => {
-            const transform = this.transfrom(this.stepDatas.at(-1)!.point!);
+        Transaction.execute(this.document, `execute ${Object.getPrototypeOf(this).data.name}`, () => {
+            const transform = this.transform(this.stepData.at(-1)!.point!);
 
             if (this.isClone) {
                 this.models?.forEach((x) => {

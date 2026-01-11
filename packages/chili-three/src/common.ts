@@ -21,7 +21,7 @@ VisualConfig.onPropertyChanged((property: keyof VisualItemConfig) => {
     }
 });
 
-export const hilightEdgeMaterial = new LineMaterial({
+export const highlightEdgeMaterial = new LineMaterial({
     linewidth: 3,
     color: ThreeHelper.fromColor(VisualConfig.highlightEdgeColor),
     side: DoubleSide,
@@ -30,7 +30,7 @@ export const hilightEdgeMaterial = new LineMaterial({
     polygonOffsetUnits: -4,
 });
 
-export const hilightDashedEdgeMaterial = new LineMaterial({
+export const highlightDashedEdgeMaterial = new LineMaterial({
     linewidth: 3,
     color: ThreeHelper.fromColor(VisualConfig.highlightEdgeColor),
     side: DoubleSide,

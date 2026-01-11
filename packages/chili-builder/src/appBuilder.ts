@@ -75,7 +75,7 @@ export class AppBuilder {
             Logger.info("initializing three");
 
             const three = await import("chili-three");
-            this._visualFactory = new three.ThreeVisulFactory();
+            this._visualFactory = new three.ThreeVisualFactory();
         });
         return this;
     }

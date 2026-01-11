@@ -44,7 +44,7 @@ export interface MouseAndDetected {
 
 export interface ISnap {
     snap(data: MouseAndDetected): SnapResult | undefined;
-    readonly handleSnaped?: (document: IDocument, snaped?: SnapResult) => void;
+    readonly handleSnapped?: (document: IDocument, snapped?: SnapResult) => void;
     removeDynamicObject(): void;
     clear(): void;
 }

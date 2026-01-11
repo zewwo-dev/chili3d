@@ -16,7 +16,7 @@ export class MeshNode extends VisualNode {
         return "body.meshNode";
     }
 
-    @Serializer.serialze()
+    @Serializer.serialize()
     @Property.define("common.material", { type: "materialId" })
     get materialId(): string | string[] {
         return this.getPrivateValue("materialId");
@@ -26,7 +26,7 @@ export class MeshNode extends VisualNode {
     }
 
     protected _mesh: Mesh;
-    @Serializer.serialze()
+    @Serializer.serialize()
     get mesh(): Mesh {
         return this._mesh;
     }

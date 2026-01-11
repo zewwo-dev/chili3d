@@ -18,7 +18,7 @@ export class PyramidNode extends ParameterShapeNode {
         return "body.pyramid";
     }
 
-    @Serializer.serialze()
+    @Serializer.serialize()
     @Property.define("box.dx")
     get dx() {
         return this.getPrivateValue("dx");
@@ -27,7 +27,7 @@ export class PyramidNode extends ParameterShapeNode {
         this.setPropertyEmitShapeChanged("dx", dx);
     }
 
-    @Serializer.serialze()
+    @Serializer.serialize()
     @Property.define("box.dy")
     get dy() {
         return this.getPrivateValue("dy");
@@ -36,7 +36,7 @@ export class PyramidNode extends ParameterShapeNode {
         this.setPropertyEmitShapeChanged("dy", dy);
     }
 
-    @Serializer.serialze()
+    @Serializer.serialize()
     @Property.define("box.dz")
     get dz() {
         return this.getPrivateValue("dz");
@@ -45,7 +45,7 @@ export class PyramidNode extends ParameterShapeNode {
         this.setPropertyEmitShapeChanged("dz", dz);
     }
 
-    @Serializer.serialze()
+    @Serializer.serialize()
     get plane(): Plane {
         return this.getPrivateValue("plane");
     }

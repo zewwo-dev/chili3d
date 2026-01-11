@@ -2,7 +2,7 @@
 // See LICENSE file in the project root for full license information.
 
 export * from "./application";
-export * from "./bodys";
+export * from "./bodies";
 export * from "./commands";
 export * from "./comparers";
 export * from "./document";

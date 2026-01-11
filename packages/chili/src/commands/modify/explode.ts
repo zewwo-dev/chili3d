@@ -28,8 +28,8 @@ export class Explode extends MultistepCommand {
     protected override executeMainTask() {
         this.document.selection.clearSelection();
 
-        Transaction.execute(this.document, `excute ${Object.getPrototypeOf(this).data.name}`, () => {
-            this.stepDatas[0].nodes?.forEach((x) => {
+        Transaction.execute(this.document, `execute ${Object.getPrototypeOf(this).data.name}`, () => {
+            this.stepData[0].nodes?.forEach((x) => {
                 if (x instanceof ShapeNode) {
                     this.explodeShapeNode(x);
                 } else if (x instanceof ComponentNode) {
