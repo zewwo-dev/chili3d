@@ -67,7 +67,7 @@ export class Tracing implements IDisposable {
 
         if (change == null) return;
 
-        this.traceUploader.commitChange(change);
+        this.traceUploader.commitChange(this.serialize_one(change));
     }
 
     /**
@@ -115,16 +115,19 @@ export class Tracing implements IDisposable {
     serialize() {
         const nodes: TracingNode[] = [];
         this.nodes.forEach((node, id) => {
-            const nodeCopy = { ...node };
-            let record = node.data;
-            if (record != null) {
-                record = RecordSerializer.serializeRecord(record);
-            }
-            nodeCopy.data = record;
-
-            nodes.push(nodeCopy);
+            nodes.push(this.serialize_one(node));
         });
         return nodes;
+    }
+
+    serialize_one(node: TracingNode) {
+        const nodeCopy = { ...node };
+        let record = node.data;
+        if (record != null) {
+            record = RecordSerializer.serializeRecord(record);
+        }
+        nodeCopy.data = record;
+        return nodeCopy;
     }
 
     dispose() {
