@@ -259,7 +259,7 @@ export namespace RecordSerializer {
                 ...base,
                 records: record.records.map((r) => ({
                     action: NodeAction[r.action],
-                    node: NodeSerializer.serialize(r.node, false),
+                    node: NodeSerializer.serialize(r.node, false)[0],
                     oldParent: r.oldParent ? NodeSerializer.serialize(r.oldParent, false)[0] : undefined,
                     newParent: r.newParent ? NodeSerializer.serialize(r.newParent, false)[0] : undefined,
                     oldPrevious: r.oldPrevious
