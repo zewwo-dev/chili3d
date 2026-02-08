@@ -233,10 +233,10 @@ export namespace RecordSerializer {
                 base.type = "property";
                 break;
             case NodeLinkedListHistoryRecord:
-                base.type = "node";
+                base.type = "shape";
                 break;
             case ArrayRecord:
-                base.type = "array";
+                base.type = "list";
                 break;
             default:
                 break;
@@ -276,7 +276,7 @@ export namespace RecordSerializer {
         if (record instanceof ArrayRecord) {
             return {
                 ...base,
-                records: record.records.map((r) => serializeRecord(r)),
+                events: record.records.map((r) => serializeRecord(r)),
             };
         }
 
